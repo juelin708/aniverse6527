@@ -1,63 +1,6 @@
-/*
+import 'package:aniverse/profile_list.dart';
 import 'package:flutter/material.dart';
-
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Profile')),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            CircleAvatar(
-              radius: 50,
-              backgroundImage: AssetImage('assets/profile_picture.png'), // Make sure to add an image in the assets folder
-            ),
-            SizedBox(height: 20),
-            Text(
-              'John Doe',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'johndoe@example.com',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
-            ),
-            SizedBox(height: 20),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40.0),
-              child: Text(
-                'Write something here.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-void main() {
-  runApp(const MaterialApp(
-    home: ProfilePage(),
-  ));
-}
-*/
-
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -106,10 +49,46 @@ class ProfilePage extends StatelessWidget {
             Expanded(
               child: ListView(
                 children: <Widget>[
-                  _buildProfileItem(Icons.person, 'Following', '200'),
-                  _buildProfileItem(Icons.post_add, 'Posts', '150'),
-                  _buildProfileItem(Icons.thumb_up, 'Likes', '1200'),
-                  _buildProfileItem(Icons.collections, 'Collections', '25'),
+                  _buildProfileItem(
+                    icon: Icons.person,
+                    context: context,
+                    title: 'Following',
+                    subtitle:'200',
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => FollowersScreen()),
+                      );
+                    },
+                  ),
+                  _buildProfileItem(
+                    icon: Icons.post_add,
+                    context: context,
+                    title: 'My Posts',
+                    subtitle: '50',
+                    onTap: () {
+                      Navigator.push(context,MaterialPageRoute(builder: (context) => PostsScreen()),
+                      );
+                    },
+                  ),
+                  _buildProfileItem(
+                    icon: Icons.thumb_up,
+                    context: context,
+                    title: 'Likes',
+                    subtitle: '1200',
+                    onTap: () {
+                      Navigator.push(context,MaterialPageRoute(builder: (context) => LikesScreen()),
+                      );
+                    },
+                  ),
+                  _buildProfileItem(
+                    icon: Icons.collections,
+                    context: context,
+                    title: 'Collections',
+                    subtitle: '100',
+                    onTap: () {
+                      Navigator.push(context,MaterialPageRoute(builder: (context) => CollectionsScreen()),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
@@ -118,6 +97,18 @@ class ProfilePage extends StatelessWidget {
       ),
     );
   }
+
+    Widget _buildProfileItem({required BuildContext context, required String title, required String subtitle, required VoidCallback onTap, required IconData icon}) {
+    return InkWell(
+      onTap: onTap,
+      child: ListTile(
+        leading: Icon(icon),
+        title: Text(title),
+        subtitle: Text(subtitle),
+      ),
+    );
+  }
+}
 
   Widget _buildProfileItem(IconData icon, String title, String count) {
     return Padding(
@@ -137,7 +128,7 @@ class ProfilePage extends StatelessWidget {
       ),
     );
   }
-}
+
 
 void main() {
   runApp(const MaterialApp(
