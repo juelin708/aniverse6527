@@ -1,9 +1,9 @@
+import 'package:aniverse/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'profile_page.dart';
-import 'register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -165,7 +165,14 @@ class _LoginPageState extends State<LoginPage> {
                   FadeInUp(
                     duration: const Duration(milliseconds: 1900),
                     child: MaterialButton(
-                      onPressed: _login,
+                    //  onPressed: _login,
+                      onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ProfilePage()),
+                                );
+                              },
                       color: const Color.fromARGB(255, 207, 39, 123),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50),
