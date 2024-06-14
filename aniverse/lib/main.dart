@@ -1,3 +1,4 @@
+import 'package:aniverse/map.dart';
 import 'package:flutter/material.dart';
 import 'login_page.dart';
 
@@ -58,7 +59,7 @@ class MyHomePage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const LoginPage()),
+                          builder: (context) => MapSample()),
                     );
                   },
                 ),

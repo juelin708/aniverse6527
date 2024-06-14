@@ -43,3 +43,14 @@
         </intent>
     </queries>
 </manifest>
+
+    <application
+        android:label="AniVerse"
+        android:icon="@mipmap/ic_launcher">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDuVJk1e_h4PNLeE_HJcz-K_zwKSX4v2mU"/>
+        <!-- Other application components -->
+    </application>
+
+</manifest>
