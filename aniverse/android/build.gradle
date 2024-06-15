@@ -17,6 +17,6 @@ tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
 
-dependencies {
+/*dependencies {
     implementation 'com.google.android.gms:play-services-maps:18.0.0'
 }
