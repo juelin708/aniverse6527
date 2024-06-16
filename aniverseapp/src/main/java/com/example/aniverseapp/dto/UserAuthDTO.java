@@ -1,18 +1,8 @@
-package com.example.aniverseapp;
+package com.example.aniverseapp.dto;
 
-public class User {
-    private Long id;
+public class UserAuthDTO {
     private String username;
     private String password;
-
-    // Getters and setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getUsername() {
         return username;
@@ -30,3 +20,4 @@ public class User {
         this.password = password;
     }
 }
+
