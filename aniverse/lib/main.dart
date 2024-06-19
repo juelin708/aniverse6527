@@ -1,4 +1,3 @@
-import 'package:aniverse/map.dart';
 import 'package:flutter/material.dart';
 import 'login_page.dart';
 
@@ -30,11 +29,6 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      /*appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 208, 238, 226),
-        title: Image.asset('images/logo.png', height: 180),
-        centerTitle: true,
-      ),*/
       body: Stack(
         children: <Widget>[
           // Background image
@@ -59,7 +53,7 @@ class MyHomePage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MapSample()),
+                          builder: (context) => LoginPage()),
                     );
                   },
                 ),

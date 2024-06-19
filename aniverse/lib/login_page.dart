@@ -170,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => ProfilePage()),
+                                      builder: (context) => LoginPage()),
                                 );
                               },
                       color: const Color.fromARGB(255, 207, 39, 123),
