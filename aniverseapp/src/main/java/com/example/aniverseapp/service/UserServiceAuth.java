@@ -1,6 +1,5 @@
 package com.example.aniverseapp.service;
 
-/*import org.hibernate.query.IllegalSelectQueryException;*/
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,25 +43,4 @@ public class UserServiceAuth implements UserService {
             return Response.newFailure("Invalid password");
         }
     }
-    /*
-    @Override
-    public UserDTO registerUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Optional<User> opUser = userRepository.findById(user.getUsername());
-        if (!opUser.isPresent()) {
-            throw new IllegalStateException("username: " + user.getUsername() + 
-                "has been taken");
-        }
-        User registered = userRepository.save(user);
-        return UserConverter.convertUser(registered);
-    }
-
-    public UserDTO authenticateUser(String username, String password) {
-        Optional<User> OpUser = userRepository.findById(username);
-        if (OpUser.isPresent() && passwordEncoder.matches(password, OpUser.get().getPassword())) {
-            return UserConverter.convertUser(OpUser.get());
-        }
-        return null;
-    }
-    */
 }
