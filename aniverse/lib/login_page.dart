@@ -18,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _login() async {
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:8080/auth/login'),
+      Uri.parse('http://10.0.2.2:8080/api/auth/login'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -28,16 +28,21 @@ class _LoginPageState extends State<LoginPage> {
       }),
     );
 
-    if (response.statusCode == 200) {
+    final responseJson = jsonDecode(response.body);
+
+    if (response.statusCode == 200 && responseJson['success'] == true) {
       // Navigate to profile page
+      final snackBar = SnackBar(content: Text(responseJson['message']));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const ProfilePage()),
       );
     } else {
       // Show error message
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Invalid credentials')));
+      final snackBar = SnackBar(content: Text(responseJson['message']));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
@@ -98,7 +103,8 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white.withOpacity(0.5),
                           border: Border.all(
-                              color: const Color.fromARGB(255, 243, 143, 176).withOpacity(0.7)),
+                              color: const Color.fromARGB(255, 243, 143, 176)
+                                  .withOpacity(0.7)),
                           boxShadow: const [
                             BoxShadow(
                               color: Colors.white,
@@ -165,14 +171,7 @@ class _LoginPageState extends State<LoginPage> {
                   FadeInUp(
                     duration: const Duration(milliseconds: 1900),
                     child: MaterialButton(
-                    //  onPressed: _login,
-                      onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LoginPage()),
-                                );
-                              },
+                      onPressed: _login,
                       color: const Color.fromARGB(255, 207, 39, 123),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50),

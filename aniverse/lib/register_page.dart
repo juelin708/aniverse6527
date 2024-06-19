@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'login_page.dart';
+import 'profile_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -16,7 +16,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> _register() async {
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:8080/auth/register'),
+      Uri.parse('http://10.0.2.2:8080/api/auth/register'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -26,16 +26,20 @@ class _RegisterPageState extends State<RegisterPage> {
       }),
     );
 
-    if (response.statusCode == 200) {
+    final responseJson = jsonDecode(response.body);
+    final snackBar = SnackBar(content: Text(responseJson['message']));
+
+    if (response.statusCode == 200 && responseJson['success'] == true) {
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
       // Navigate to login page
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const LoginPage()),
+        MaterialPageRoute(builder: (context) => const ProfilePage()),
       );
     } else {
       // Show error message
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Registration failed')));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
