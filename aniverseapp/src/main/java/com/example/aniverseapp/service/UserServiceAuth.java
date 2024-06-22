@@ -38,7 +38,7 @@ public class UserServiceAuth implements UserService {
         if (user != null && userDTO.getPassword().equals(user.getPassword())) {
             return Response.newSuccess("Login successful");
         } else if (user == null) {
-            return Response.newFailure("Invalid Username");
+            return Response.newFailure("Invalid username");
         } else {
             return Response.newFailure("Invalid password");
         }
