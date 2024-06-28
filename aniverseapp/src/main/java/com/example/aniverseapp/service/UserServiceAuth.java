@@ -17,26 +17,33 @@ public class UserServiceAuth implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public UserProfileDTO getUserById(Long id) {
+    public Response<UserProfileDTO> getUserById(Long id) {
         User user = userRepository.findById(id).orElse(null);
-        return user != null ? UserConverter.convertToUserProfileDTO(user) : null;
+        if (user != null) {
+            Response<UserProfileDTO> response = new Response<UserProfileDTO>();
+            response.setData(UserConverter.convertToUserProfileDTO(user));
+            response.setSuccess(true);
+            return response;
+        } else {
+            return null;
+        }
     }
 
     @Override
-    public Response registerUser(UserAuthDTO userDTO) {
+    public Response<Void> registerUser(UserAuthDTO userDTO) {
         if (userRepository.findByUsername(userDTO.getUsername()) != null) {
             return Response.newFailure("Username already taken");
         }
         User user = UserConverter.convertToEntity(userDTO);
         user.setPassword(userDTO.getPassword());
         userRepository.save(user);
-        return Response.newSuccess("User registered successfully");
+        return Response.<Void>newSuccess(null, "User registered successfully");
     }
 
-    public Response loginUser(UserAuthDTO userDTO) {
+    public Response<Void> loginUser(UserAuthDTO userDTO) {
         User user = userRepository.findByUsername(userDTO.getUsername());
         if (user != null && userDTO.getPassword().equals(user.getPassword())) {
-            return Response.newSuccess("Login successful");
+            return Response.newSuccess(null, "Login successful");
         } else if (user == null) {
             return Response.newFailure("Invalid username");
         } else {

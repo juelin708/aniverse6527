@@ -17,17 +17,17 @@ public class AuthController {
     private UserService userService;
 
     @GetMapping("user/{id}")
-    public UserProfileDTO getUserById(@PathVariable Long id) {
+    public Response<UserProfileDTO> getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
     
     @PostMapping("/register")
-    public Response registerUser(@RequestBody UserAuthDTO userDTO) {
+    public Response<Void> registerUser(@RequestBody UserAuthDTO userDTO) {
         return userService.registerUser(userDTO);
     }
 
     @PostMapping("/login")
-    public Response loginUser(@RequestBody UserAuthDTO userDTO) {
+    public Response<Void> loginUser(@RequestBody UserAuthDTO userDTO) {
         return userService.loginUser(userDTO);
     }
 }
