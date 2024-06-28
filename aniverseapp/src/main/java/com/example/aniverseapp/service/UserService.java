@@ -6,7 +6,7 @@ import com.example.aniverseapp.Response;
 
 
 public interface UserService {
-    public UserProfileDTO getUserById(Long id);
-    public Response registerUser(UserAuthDTO userDTO);
-    public Response loginUser(UserAuthDTO userDTO);
+    public Response<UserProfileDTO> getUserById(Long id);
+    public Response<Void> registerUser(UserAuthDTO userDTO);
+    public Response<Void> loginUser(UserAuthDTO userDTO);
 }
