@@ -37,8 +37,9 @@ public class Response<T> {
         return response;
     }
 
-    public static Response<Void> newFailure(String message) {
-        Response<Void> response = new Response<Void>();
+    public static <K> Response<K> newFailure(String message) {
+        Response<K> response = new Response<K>();
+        response.setData(null);
         response.setSuccess(false);
         response.setMessage(message);
         return response;
