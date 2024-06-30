@@ -14,7 +14,7 @@ public interface UserService {
     Response<Void> loginUser(UserAuthDTO userDTO);
     Response<Void> deleteUserById(long id);
     Response<UserProfileDTO> updateUserById(long id, UserUpdateDTO userDTO);
-    Response<List<UserProfileDTO>> findFollowings(long id);
-    Response<List<UserProfileDTO>> findFans(long id);
+    //Response<List<UserProfileDTO>> findFollowings(long id);
+    //Response<List<UserProfileDTO>> findFans(long id);
 
 }

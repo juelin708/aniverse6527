@@ -20,13 +20,23 @@ public class TagController {
         return tagService.getTagById(id);
     }
 
+    @GetMapping("/byTagname/{tagname}")
+    public Response<TagDTO> getTagByTagname(@PathVariable String tagname) {
+        return tagService.getTagByTagname(tagname);
+    }
+
     @PostMapping("/add")
     public Response<Void> addTag(@RequestBody TagDTO tagDTO) {
         return tagService.addTag(tagDTO);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteUserById(@PathVariable long id) {
-        tagService.deleteTagById(id);
+    @DeleteMapping("/delete/{id}")
+    public Response<Void> deleteTagById(@PathVariable long id) {
+        return tagService.deleteTagById(id);
+    }
+
+    @PutMapping("/update/{id}")
+    public Response<TagDTO> updateUserById(@PathVariable long id, @RequestParam String newTagname) {
+        return tagService.updateTagById(id, newTagname);
     }
 }

@@ -27,12 +27,12 @@ public class User {
     @Column(name="password")
     private String password;
 
-    @Column(name="avatarUrl")
-    private String avatarUrl;
+   // @Column(name="avatarUrl")
+   // private String avatarUrl;
 
     @Column(name="bio")
     private String bio;
-
+/* 
     @ManyToMany
     @JoinTable(
         name = "fans",
@@ -53,7 +53,7 @@ public class User {
     private Integer fanNum;     
     private Integer followingNum;  
     private boolean isFollowing;   
-
+*/
     
     // Getters and setters
     public long getId() {
@@ -75,7 +75,7 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
+/* 
     public String getAvatarUrl() {
         return avatarUrl;
     }
@@ -83,7 +83,7 @@ public class User {
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
     }
-
+*/
     public String getBio() {
         return bio;
     }
@@ -91,7 +91,7 @@ public class User {
     public void setBio(String bio) {
         this.bio = bio;
     }
-
+/* 
     public List<User> getFollowings() {
         return followings;
     }
@@ -139,4 +139,5 @@ public class User {
     public void setIsFollowing(boolean isFollowing) {
         this.isFollowing = isFollowing;
     }
+*/
 }

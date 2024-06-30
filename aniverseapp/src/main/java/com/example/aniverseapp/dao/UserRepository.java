@@ -11,9 +11,9 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsername(String username);
 
-    @Query("select u.followings from User u where u.id = :id")
+    /*@Query("select u.followings from User u where u.id = :id")
     List<User> findFollowingsById(@Param("id") long id);
 
     @Query("select u.fans from User u where u.id = :id")
-    List<User> findFansById(@Param("id") long id);
+    List<User> findFansById(@Param("id") long id);*/
 }

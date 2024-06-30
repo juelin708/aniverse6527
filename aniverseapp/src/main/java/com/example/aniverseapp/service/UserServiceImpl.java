@@ -81,13 +81,13 @@ public class UserServiceImpl implements UserService {
             return Response.newFailure("User with id: " + id + " does not exist");
         }
         User original = userRepository.findById(id).orElse(null);
-        original.setAvatarUrl(userDTO.getAvatarUrl());
+        //original.setAvatarUrl(userDTO.getAvatarUrl());
         original.setBio(userDTO.getBio());
         userRepository.save(original);
         return Response.newSuccess(UserConverter.convertToUserProfileDTO(original), "User updated");
     }
 
-    @Override
+    /*@Override
     public Response<List<UserProfileDTO>> findFollowings(long id) {
         if (userRepository.findById(id).isEmpty()) {
             return Response.newFailure("User with id: " + id + " does not exist");
@@ -111,6 +111,6 @@ public class UserServiceImpl implements UserService {
             list.add(UserConverter.convertToUserProfileDTO(user));
         }
         return Response.newSuccess(list, null);
-    }
+    }*/
 }
 

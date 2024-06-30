@@ -28,7 +28,7 @@ public class AuthController {
         return userService.getUserById(id);
     }
 
-    @GetMapping("user/{username}")
+    @GetMapping("user/byUsername/{username}")
     public Response<UserProfileDTO> getUserByUsername(@PathVariable String username) {
         return userService.getUserByUsername(username);
     }
@@ -43,17 +43,17 @@ public class AuthController {
         return userService.loginUser(userDTO);
     }
 
-    @DeleteMapping("/user/{id}")
+    @DeleteMapping("/user/delete/{id}")
     public Response<Void> deleteUserById(@PathVariable long id) {
         return userService.deleteUserById(id);
     }
 
-    @PutMapping("user/{id}")
+    @PutMapping("user/update/{id}")
     public Response<UserProfileDTO> updateUserById(@PathVariable long id, @RequestBody UserUpdateDTO userDTO) {
         return userService.updateUserById(id, userDTO);
     }
 
-    @GetMapping("followings/{id}")
+    /* @GetMapping("followings/{id}")
     public Response<List<UserProfileDTO>> findFollowings(@PathVariable long id) {
         return userService.findFollowings(id);
     } 
@@ -61,5 +61,5 @@ public class AuthController {
     @GetMapping("fans/{id}")
     public Response<List<UserProfileDTO>> findFans(@PathVariable long id) {
         return userService.findFans(id);
-    } 
+    } */
 }
