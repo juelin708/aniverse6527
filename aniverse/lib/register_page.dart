@@ -1,7 +1,7 @@
+import 'package:aniverse/animals.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'profile_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -35,7 +35,7 @@ class _RegisterPageState extends State<RegisterPage> {
       // Navigate to login page
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const ProfilePage()),
+        MaterialPageRoute(builder: (context) => const MainScreen()),
       );
     } else {
       // Show error message

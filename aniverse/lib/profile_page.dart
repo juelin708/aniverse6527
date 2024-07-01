@@ -16,7 +16,8 @@ class ProfilePage extends StatelessWidget {
             const SizedBox(height: 20),
             const CircleAvatar(
               radius: 50,
-              backgroundImage: AssetImage('assets/profile_picture.png'), // Placeholder profile picture
+              backgroundImage: AssetImage(
+                  'assets/profile_picture.png'), // Placeholder profile picture
             ),
             const SizedBox(height: 20),
             const Text(
@@ -27,13 +28,13 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            const Text(
+            /*const Text(
               'johndoe@example.com',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
               ),
-            ),
+            ),*/
             const SizedBox(height: 20),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 40.0),
@@ -53,9 +54,12 @@ class ProfilePage extends StatelessWidget {
                     icon: Icons.person,
                     context: context,
                     title: 'Following',
-                    subtitle:'200',
+                    subtitle: '200',
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => FollowersScreen()),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => FollowersScreen()),
                       );
                     },
                   ),
@@ -65,7 +69,9 @@ class ProfilePage extends StatelessWidget {
                     title: 'My Posts',
                     subtitle: '50',
                     onTap: () {
-                      Navigator.push(context,MaterialPageRoute(builder: (context) => PostsScreen()),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PostsScreen()),
                       );
                     },
                   ),
@@ -75,7 +81,9 @@ class ProfilePage extends StatelessWidget {
                     title: 'Likes',
                     subtitle: '1200',
                     onTap: () {
-                      Navigator.push(context,MaterialPageRoute(builder: (context) => LikesScreen()),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LikesScreen()),
                       );
                     },
                   ),
@@ -85,7 +93,10 @@ class ProfilePage extends StatelessWidget {
                     title: 'Collections',
                     subtitle: '100',
                     onTap: () {
-                      Navigator.push(context,MaterialPageRoute(builder: (context) => CollectionsScreen()),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CollectionsScreen()),
                       );
                     },
                   ),
@@ -98,7 +109,12 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-    Widget _buildProfileItem({required BuildContext context, required String title, required String subtitle, required VoidCallback onTap, required IconData icon}) {
+  Widget _buildProfileItem(
+      {required BuildContext context,
+      required String title,
+      required String subtitle,
+      required VoidCallback onTap,
+      required IconData icon}) {
     return InkWell(
       onTap: onTap,
       child: ListTile(
@@ -110,25 +126,24 @@ class ProfilePage extends StatelessWidget {
   }
 }
 
-  Widget _buildProfileItem(IconData icon, String title, String count) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Card(
-        child: ListTile(
-          leading: Icon(icon, size: 40, color: Colors.blue),
-          title: Text(
-            title,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          trailing: Text(
-            count,
-            style: const TextStyle(fontSize: 16),
-          ),
+Widget _buildProfileItem(IconData icon, String title, String count) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+    child: Card(
+      child: ListTile(
+        leading: Icon(icon, size: 40, color: Colors.blue),
+        title: Text(
+          title,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        trailing: Text(
+          count,
+          style: const TextStyle(fontSize: 16),
         ),
       ),
-    );
-  }
-
+    ),
+  );
+}
 
 void main() {
   runApp(const MaterialApp(
