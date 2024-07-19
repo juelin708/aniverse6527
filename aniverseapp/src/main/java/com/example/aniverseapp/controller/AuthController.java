@@ -8,13 +8,8 @@ import com.example.aniverseapp.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/api/auth")
@@ -53,13 +48,23 @@ public class AuthController {
         return userService.updateUserById(id, userDTO);
     }
 
-    /* @GetMapping("followings/{id}")
-    public Response<List<UserProfileDTO>> findFollowings(@PathVariable long id) {
+    @GetMapping("followings/{id}")
+    public Response<List<String>> findFollowings(@PathVariable long id) {
         return userService.findFollowings(id);
     } 
 
     @GetMapping("fans/{id}")
-    public Response<List<UserProfileDTO>> findFans(@PathVariable long id) {
+    public Response<List<String>> findFans(@PathVariable long id) {
         return userService.findFans(id);
-    } */
+    } 
+
+    @PostMapping("/{fanId}/follow/{followedId}")
+    public Response<Void> followAUser(@PathVariable Long fanId, @PathVariable Long followedId) {
+        return userService.followAUser(fanId, followedId);
+    }
+
+    @DeleteMapping("/{fanId}/unfollow/{followedId}")
+    public Response<Void> cancelFollowAUser(@PathVariable Long fanId, @PathVariable Long followedId) {
+        return userService.cancelFollowAUser(fanId, followedId);
+    }
 }

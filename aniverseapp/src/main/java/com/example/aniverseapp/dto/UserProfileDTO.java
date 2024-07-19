@@ -1,15 +1,27 @@
 package com.example.aniverseapp.dto;
 
-public class UserProfileDTO {
+import java.util.List;
 
+public class UserProfileDTO {
+    private Long id;
     private String username;
     private String avatarUrl;
     private String bio;
+    private List<String> followings;
+    private List<String> fans;
     private Integer postNum;    
     private Integer fanNum;     
     private Integer followingNum;  
     private boolean isFollowing; 
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     public String getUsername() {
         return username;
     }
@@ -32,6 +44,22 @@ public class UserProfileDTO {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public List<String> getFollowings() {
+        return followings;
+    }
+
+    public List<String> getFans() {
+        return fans;
+    }
+
+    public void setFollowings(List<String> list) {
+        this.followings = list;
+    }
+
+    public void setFans(List<String> list) {
+        this.fans = list;
     }
 
     public Integer getPostNum() {

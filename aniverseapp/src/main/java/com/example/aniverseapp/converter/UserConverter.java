@@ -1,21 +1,39 @@
 package com.example.aniverseapp.converter;
 
-import com.example.aniverseapp.dto.UserAuthDTO;
-import com.example.aniverseapp.dto.UserProfileDTO;
 import com.example.aniverseapp.dao.User;
+import com.example.aniverseapp.dto.UserProfileDTO;
+import com.example.aniverseapp.dto.UserAuthDTO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserConverter {
-
-    public static UserAuthDTO convertToUserAuthDTO(User user) {
-        UserAuthDTO userDTO = new UserAuthDTO();
-        userDTO.setUsername(user.getUsername());
-        userDTO.setPassword(user.getPassword());
-        return userDTO;
-    }
 
     public static UserProfileDTO convertToUserProfileDTO(User user) {
         UserProfileDTO userDTO = new UserProfileDTO();
         userDTO.setUsername(user.getUsername());
+        userDTO.setAvatarUrl(user.getAvatarUrl());
+        userDTO.setBio(user.getBio());
+
+        List<User> followings = user.getFollowings();
+        List<String> followingsNames = new ArrayList<>();
+        for (User following : followings) {
+            String followingName = following.getUsername();
+            followingsNames.add(followingName);
+        }
+        userDTO.setFollowings(followingsNames);
+
+        List<User> fans = user.getFans();
+        List<String> fansNames = new ArrayList<>();
+        for (User fan : fans) {
+            String fanName = fan.getUsername();
+            fansNames.add(fanName);
+        }
+        userDTO.setFans(fansNames);
+
+        userDTO.setFanNum(fans.size());
+        userDTO.setFollowingNum(followings.size());
+        userDTO.setId(user.getId());
         return userDTO;
     }
 

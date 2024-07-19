@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.aniverseapp.converter.UserConverter;
 import com.example.aniverseapp.dao.User;
@@ -24,19 +25,24 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id).orElse(null);
         if (user != null) {
             Response<UserProfileDTO> response = new Response<UserProfileDTO>();
-            response.setData(UserConverter.convertToUserProfileDTO(user));
+            UserProfileDTO userDTO = UserConverter.convertToUserProfileDTO(user);
+            userDTO.setPostNum(userRepository.countPosts(id));
+            response.setData(userDTO);
             response.setSuccess(true);
             return response;
         } else {
             return Response.newFailure("User with id: " + id + " does not exist");
         }
     }
+
     @Override
     public Response<UserProfileDTO> getUserByUsername(String username) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
             Response<UserProfileDTO> response = new Response<UserProfileDTO>();
-            response.setData(UserConverter.convertToUserProfileDTO(user));
+            UserProfileDTO userDTO = UserConverter.convertToUserProfileDTO(user);
+            userDTO.setPostNum(userRepository.countPosts(user.getId()));
+            response.setData(userDTO);
             response.setSuccess(true);
             return response;
         } else {
@@ -46,9 +52,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Response<Void> registerUser(UserAuthDTO userDTO) {
+        if (userDTO.getUsername() == null) {
+            return Response.newFailure("Username cannot be null");
+        }
+        if (userDTO.getPassword() == null) {
+            return Response.newFailure("Password cannot be null");
+        }
         if (userRepository.findByUsername(userDTO.getUsername()) != null) {
             return Response.newFailure("Username already taken");
         }
+
         User user = UserConverter.convertToEntity(userDTO);
         user.setPassword(userDTO.getPassword());
         userRepository.save(user);
@@ -81,36 +94,54 @@ public class UserServiceImpl implements UserService {
             return Response.newFailure("User with id: " + id + " does not exist");
         }
         User original = userRepository.findById(id).orElse(null);
-        //original.setAvatarUrl(userDTO.getAvatarUrl());
-        original.setBio(userDTO.getBio());
+        if (userDTO.getAvatarUrl() != null) {
+            original.setAvatarUrl(userDTO.getAvatarUrl());
+        }
+        if (userDTO.getBio() != null) {
+            original.setBio(userDTO.getBio());
+        }
+        if (userDTO.getPassword() != null) {
+            original.setPassword(userDTO.getPassword());
+        }
         userRepository.save(original);
         return Response.newSuccess(UserConverter.convertToUserProfileDTO(original), "User updated");
     }
 
-    /*@Override
-    public Response<List<UserProfileDTO>> findFollowings(long id) {
+    @Override
+    public Response<List<String>> findFollowings(long id) {
         if (userRepository.findById(id).isEmpty()) {
             return Response.newFailure("User with id: " + id + " does not exist");
         }
-        List<User> followings = userRepository.findFollowingsById(id);
-        List<UserProfileDTO> list = List.<UserProfileDTO>of();
-        for (User user : followings) {
-            list.add(UserConverter.convertToUserProfileDTO(user));
-        }
+        User user = userRepository.findById(id).get();
+        List<String> list = UserConverter.convertToUserProfileDTO(user).getFollowings();
         return Response.newSuccess(list, null);
     }
 
     @Override
-    public Response<List<UserProfileDTO>> findFans(long id) {
+    public Response<List<String>> findFans(long id) {
         if (userRepository.findById(id).isEmpty()) {
             return Response.newFailure("User with id: " + id + " does not exist");
         }
-        List<User> fans = userRepository.findFansById(id);
-        List<UserProfileDTO> list = List.<UserProfileDTO>of();
-        for (User user : fans) {
-            list.add(UserConverter.convertToUserProfileDTO(user));
-        }
+        User user = userRepository.findById(id).get();
+        List<String> list = UserConverter.convertToUserProfileDTO(user).getFans();
         return Response.newSuccess(list, null);
-    }*/
+    }
+
+    @Override
+    @Transactional
+    public Response<Void> followAUser(Long fanId, Long followedId) {
+        if (fanId.equals(followedId)) {
+            return Response.newFailure("You cannot follow yourself");
+        }
+        userRepository.followAUser(fanId, followedId);
+        return Response.newSuccess(null, null);
+    }
+
+    @Override
+    @Transactional
+    public Response<Void> cancelFollowAUser(Long fanId, Long followedId) {
+        userRepository.cancelFollowAUser(fanId, followedId);
+        return Response.newSuccess(null, null);
+    }
 }
 
