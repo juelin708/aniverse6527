@@ -10,8 +10,8 @@ import java.util.List;
 public interface UserService {
     Response<UserProfileDTO> getUserById(Long id);
     Response<UserProfileDTO> getUserByUsername(String username);
-    Response<Void> registerUser(UserAuthDTO userDTO);
-    Response<Void> loginUser(UserAuthDTO userDTO);
+    Response<UserProfileDTO> registerUser(UserAuthDTO userDTO);
+    Response<UserProfileDTO> loginUser(UserAuthDTO userDTO);
     Response<Void> deleteUserById(long id);
     Response<UserProfileDTO> updateUserById(long id, UserUpdateDTO userDTO);
     Response<List<String>> findFollowings(long id);

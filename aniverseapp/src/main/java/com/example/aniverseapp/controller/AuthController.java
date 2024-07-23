@@ -29,12 +29,12 @@ public class AuthController {
     }
     
     @PostMapping("/register")
-    public Response<Void> registerUser(@RequestBody UserAuthDTO userDTO) {
+    public Response<UserProfileDTO> registerUser(@RequestBody UserAuthDTO userDTO) {
         return userService.registerUser(userDTO);
     }
 
     @PostMapping("/login")
-    public Response<Void> loginUser(@RequestBody UserAuthDTO userDTO) {
+    public Response<UserProfileDTO> loginUser(@RequestBody UserAuthDTO userDTO) {
         return userService.loginUser(userDTO);
     }
 

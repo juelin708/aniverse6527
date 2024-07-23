@@ -13,6 +13,7 @@ public class UserProfileDTO {
     private Integer fanNum;     
     private Integer followingNum;  
     private boolean isFollowing; 
+    private Integer likedPostNum;
 
     public Long getId() {
         return id;
@@ -92,5 +93,13 @@ public class UserProfileDTO {
 
     public void setIsFollowing(boolean isFollowing) {
         this.isFollowing = isFollowing;
+    }
+
+    public Integer getLikedPostNum() {
+        return likedPostNum;
+    }
+
+    public void setLikedPostNum(Integer likedPostNum) {
+        this.likedPostNum = likedPostNum;
     }
 }

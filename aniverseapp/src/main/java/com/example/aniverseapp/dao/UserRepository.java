@@ -31,4 +31,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT COUNT(p) FROM Post p WHERE p.user.id = :userId")
     Integer countPosts(Long userId);
+
+    @Query("SELECT COUNT(p) FROM Post p JOIN p.likedBy u WHERE u.id = :userId")
+    Integer countLikedPosts(@Param("userId") Long userId);
 }

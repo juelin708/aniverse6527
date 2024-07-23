@@ -51,4 +51,9 @@ public class PostController {
     public Response<Void> deletePostById(@PathVariable long id) {
         return postService.deletePostById(id);
     }
+
+    @GetMapping("/likedBy/{userId}")
+    public Response<List<PostDTO>> getPostsLikedByUser(@PathVariable Long userId) {
+        return postService.getPostsLikedByUser(userId);
+    }
 }

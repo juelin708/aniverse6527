@@ -122,5 +122,17 @@ public class PostService {
         postRepository.deleteById(id);
         return Response.newSuccess(null, "Post with id: " + id + " deleted");
     }
+
+    public Response<List<PostDTO>> getPostsLikedByUser(Long userId) {
+        if (userRepository.findById(userId).isEmpty()) {
+            return Response.newFailure("User with id: " + userId + " does not exist");
+        }
+        List<Post> posts = postRepository.findPostsLikedByUserId(userId);
+        List<PostDTO> postDTOs = new ArrayList<>();
+        for (Post post : posts) {
+            postDTOs.add(PostConverter.convertToPostDTO(post));
+        }
+        return Response.newSuccess(postDTOs, null);
+    }
 }
 

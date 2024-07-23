@@ -27,6 +27,7 @@ public class UserServiceImpl implements UserService {
             Response<UserProfileDTO> response = new Response<UserProfileDTO>();
             UserProfileDTO userDTO = UserConverter.convertToUserProfileDTO(user);
             userDTO.setPostNum(userRepository.countPosts(id));
+            userDTO.setLikedPostNum(userRepository.countLikedPosts(id));
             response.setData(userDTO);
             response.setSuccess(true);
             return response;
@@ -42,6 +43,7 @@ public class UserServiceImpl implements UserService {
             Response<UserProfileDTO> response = new Response<UserProfileDTO>();
             UserProfileDTO userDTO = UserConverter.convertToUserProfileDTO(user);
             userDTO.setPostNum(userRepository.countPosts(user.getId()));
+            userDTO.setLikedPostNum(userRepository.countLikedPosts(user.getId()));
             response.setData(userDTO);
             response.setSuccess(true);
             return response;
@@ -51,7 +53,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Response<Void> registerUser(UserAuthDTO userDTO) {
+    public Response<UserProfileDTO> registerUser(UserAuthDTO userDTO) {
         if (userDTO.getUsername() == null) {
             return Response.newFailure("Username cannot be null");
         }
@@ -63,15 +65,20 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = UserConverter.convertToEntity(userDTO);
-        user.setPassword(userDTO.getPassword());
         userRepository.save(user);
-        return Response.<Void>newSuccess(null, "User registered successfully");
+        UserProfileDTO dto = UserConverter.convertToUserProfileDTO(user);
+        dto.setPostNum(userRepository.countPosts(user.getId()));
+        dto.setLikedPostNum(userRepository.countLikedPosts(user.getId()));
+        return Response.newSuccess(dto, "User registered successfully");
     }
 
-    public Response<Void> loginUser(UserAuthDTO userDTO) {
+    public Response<UserProfileDTO> loginUser(UserAuthDTO userDTO) {
         User user = userRepository.findByUsername(userDTO.getUsername());
         if (user != null && userDTO.getPassword().equals(user.getPassword())) {
-            return Response.newSuccess(null, "Login successful");
+            UserProfileDTO dto = UserConverter.convertToUserProfileDTO(user);
+            dto.setPostNum(userRepository.countPosts(user.getId()));
+            dto.setLikedPostNum(userRepository.countLikedPosts(user.getId()));
+            return Response.newSuccess(dto, "Login successful");
         } else if (user == null) {
             return Response.newFailure("Invalid username");
         } else {
@@ -104,7 +111,10 @@ public class UserServiceImpl implements UserService {
             original.setPassword(userDTO.getPassword());
         }
         userRepository.save(original);
-        return Response.newSuccess(UserConverter.convertToUserProfileDTO(original), "User updated");
+        UserProfileDTO dto = UserConverter.convertToUserProfileDTO(original);
+        dto.setPostNum(userRepository.countPosts(id));
+        dto.setLikedPostNum(userRepository.countLikedPosts(id));
+        return Response.newSuccess(dto, "User updated");
     }
 
     @Override
