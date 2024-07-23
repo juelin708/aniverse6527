@@ -34,4 +34,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT COUNT(p) FROM Post p JOIN p.likedBy u WHERE u.id = :userId")
     Integer countLikedPosts(@Param("userId") Long userId);
+
+    @Query(value="SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM fans WHERE fan_id = :fanId AND followed_id = :followedId", nativeQuery = true)
+    Integer isFollowing(@Param("fanId") Long fanId, @Param("followedId") Long followedId);
 }

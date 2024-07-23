@@ -18,4 +18,5 @@ public interface UserService {
     Response<List<String>> findFans(long id);
     Response<Void> followAUser(Long fanId, Long followedId);
     Response<Void> cancelFollowAUser(Long fanId, Long followedId);
+    Response<Integer> isFollowing(Long fanId, Long followedId);
 }

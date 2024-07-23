@@ -153,5 +153,16 @@ public class UserServiceImpl implements UserService {
         userRepository.cancelFollowAUser(fanId, followedId);
         return Response.newSuccess(null, null);
     }
+
+    @Override
+    public Response<Integer> isFollowing(Long fanId, Long followedId) {
+        if (userRepository.findById(fanId).isEmpty()) {
+            return Response.newFailure("User with id: " + fanId + " does not exist");
+        }
+        if (userRepository.findById(followedId).isEmpty()) {
+            return Response.newFailure("User with id: " + followedId + " does not exist");
+        }
+        return Response.newSuccess(userRepository.isFollowing(fanId, followedId), null);
+    }
 }
 

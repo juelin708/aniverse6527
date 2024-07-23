@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -38,7 +39,7 @@ public class AuthController {
         return userService.loginUser(userDTO);
     }
 
-    @DeleteMapping("/user/delete/{id}")
+    @DeleteMapping("user/delete/{id}")
     public Response<Void> deleteUserById(@PathVariable long id) {
         return userService.deleteUserById(id);
     }
@@ -58,7 +59,7 @@ public class AuthController {
         return userService.findFans(id);
     } 
 
-    @PostMapping("/{fanId}/follow/{followedId}")
+    @PostMapping("{fanId}/follow/{followedId}")
     public Response<Void> followAUser(@PathVariable Long fanId, @PathVariable Long followedId) {
         return userService.followAUser(fanId, followedId);
     }
@@ -67,4 +68,10 @@ public class AuthController {
     public Response<Void> cancelFollowAUser(@PathVariable Long fanId, @PathVariable Long followedId) {
         return userService.cancelFollowAUser(fanId, followedId);
     }
+
+    @GetMapping("{fanId}/isFollowing/{followedId}")
+    public Response<Integer> isFollowing(@PathVariable Long fanId, @PathVariable Long followedId) {
+        return userService.isFollowing(fanId, followedId);
+    }
+    
 }

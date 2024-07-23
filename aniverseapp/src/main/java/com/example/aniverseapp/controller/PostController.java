@@ -56,4 +56,9 @@ public class PostController {
     public Response<List<PostDTO>> getPostsLikedByUser(@PathVariable Long userId) {
         return postService.getPostsLikedByUser(userId);
     }
+
+    @GetMapping("{userId}/isLiking/{postId}")
+    public Response<Integer> isFollowing(@PathVariable Long userId, @PathVariable Long postId) {
+        return postService.isLiking(userId, postId);
+    }
 }

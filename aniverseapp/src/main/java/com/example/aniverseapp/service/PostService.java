@@ -134,5 +134,15 @@ public class PostService {
         }
         return Response.newSuccess(postDTOs, null);
     }
+
+    public Response<Integer> isLiking(Long userId, Long postId) {
+        if (userRepository.findById(userId).isEmpty()) {
+            return Response.newFailure("User with id: " + userId + " does not exist");
+        }
+        if (postRepository.findById(postId).isEmpty()) {
+            return Response.newFailure("Post with id: " + postId + " does not exist");
+        }
+        return Response.newSuccess(postRepository.isLiking(userId, postId), null);
+    }
 }
 
