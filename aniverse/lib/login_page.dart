@@ -3,6 +3,7 @@ import 'package:aniverse/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 class LoginPage extends StatefulWidget {
@@ -15,6 +16,18 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  late SharedPreferences _prefs; // Late-initialized SharedPreferences
+
+  @override
+  void initState() {
+    super.initState();
+    _initializePrefs(); // Call initialization method
+  }
+
+  Future<void> _initializePrefs() async {
+    _prefs = await SharedPreferences.getInstance(); // Await the future
+  }
 
   Future<void> _login() async {
     final response = await http.post(
@@ -31,6 +44,8 @@ class _LoginPageState extends State<LoginPage> {
     final responseJson = jsonDecode(response.body);
 
     if (response.statusCode == 200 && responseJson['success'] == true) {
+      _prefs.setInt('currentUserId', responseJson['data']['id']);
+
       // Navigate to profile page
       final snackBar = SnackBar(content: Text(responseJson['message']));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);

@@ -1,6 +1,7 @@
 import 'package:aniverse/animals.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 class RegisterPage extends StatefulWidget {
@@ -13,6 +14,18 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  late SharedPreferences _prefs; // Late-initialized SharedPreferences
+
+  @override
+  void initState() {
+    super.initState();
+    _initializePrefs(); // Call initialization method
+  }
+
+  Future<void> _initializePrefs() async {
+    _prefs = await SharedPreferences.getInstance(); // Await the future
+  }
 
   Future<void> _register() async {
     final response = await http.post(
@@ -31,6 +44,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
     if (response.statusCode == 200 && responseJson['success'] == true) {
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      _prefs.setInt('currentUserId', responseJson['data']['id']);
 
       // Navigate to login page
       Navigator.push(

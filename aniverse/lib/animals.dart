@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:aniverse/map.dart'; 
-import 'package:aniverse/profile_page.dart'; 
+import 'package:aniverse/map.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:aniverse/profile_page.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -18,12 +19,17 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[
+  Future<int?> _getCurrentUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('currentUserId') ?? 0;
+  }
+
+  static final List<Widget> _widgetOptions = <Widget>[
     Animals(),
     PlaceholderWidget(), // Page for calendar
     PlaceholderWidget(), // Page for add button
     PlaceholderWidget(), // Page for chat
-    ProfilePage(), 
+    ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -85,11 +91,11 @@ class _AnimalsState extends State<Animals> {
         title: Row(
           children: [
             IconButton(
-              icon: const Icon(Icons.location_pin, color: Colors.red), 
+              icon: const Icon(Icons.location_pin, color: Colors.red),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MapSample()), 
+                  MaterialPageRoute(builder: (context) => MapSample()),
                 );
               },
             ),
@@ -103,7 +109,7 @@ class _AnimalsState extends State<Animals> {
               ),
             ),
             IconButton(
-              icon: const Icon(Icons.search, color: Colors.black), 
+              icon: const Icon(Icons.search, color: Colors.black),
               onPressed: () {
                 // Implement search functionality here
               },
@@ -115,16 +121,16 @@ class _AnimalsState extends State<Animals> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const ProfilePage()), 
+                  MaterialPageRoute(builder: (context) => const ProfilePage()),
                 );
               },
             ),
             IconButton(
-              icon: const Icon(Icons.more_vert, color: Colors.black), 
+              icon: const Icon(Icons.more_vert, color: Colors.black),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const ProfilePage()), 
+                  MaterialPageRoute(builder: (context) => const ProfilePage()),
                 );
               },
             ),
@@ -138,19 +144,23 @@ class _AnimalsState extends State<Animals> {
           children: [
             Padding(
               padding: const EdgeInsets.all(30.0),
-              child: Image.asset('images/dog.jpg'), // Replace with your image asset
+              child: Image.asset(
+                  'images/dog.jpg'), // Replace with your image asset
             ),
             Padding(
               padding: const EdgeInsets.all(30.0),
-              child: Image.asset('images/cat.jpg'), // Replace with your image asset
+              child: Image.asset(
+                  'images/cat.jpg'), // Replace with your image asset
             ),
             Padding(
               padding: const EdgeInsets.all(30.0),
-              child: Image.asset('images/monkey.jpg'), // Replace with your image asset
+              child: Image.asset(
+                  'images/monkey.jpg'), // Replace with your image asset
             ),
             Padding(
               padding: const EdgeInsets.all(30.0),
-              child: Image.asset('images/rooster.jpg'), // Replace with your image asset
+              child: Image.asset(
+                  'images/rooster.jpg'), // Replace with your image asset
             ),
           ],
         ),
@@ -171,4 +181,3 @@ class PlaceholderWidget extends StatelessWidget {
     );
   }
 }
-
