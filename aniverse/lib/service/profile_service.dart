@@ -26,8 +26,15 @@ class ProfileService {
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
+
     if (response.statusCode == 200) {
-      return json.decode(response.body);
+      final jsonResponse = jsonDecode(response.body);
+      final data = jsonResponse['data'];
+      if (data is int) {
+        return data;
+      } else {
+        throw Exception('Invalid data type: Expected int');
+      }
     } else {
       throw Exception('Failed to check follow status');
     }

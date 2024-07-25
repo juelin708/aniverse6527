@@ -15,16 +15,16 @@ class _RegisterPageState extends State<RegisterPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  late SharedPreferences _prefs; // Late-initialized SharedPreferences
+  late SharedPreferences _prefs;
 
   @override
   void initState() {
     super.initState();
-    _initializePrefs(); // Call initialization method
+    _initializePrefs();
   }
 
   Future<void> _initializePrefs() async {
-    _prefs = await SharedPreferences.getInstance(); // Await the future
+    _prefs = await SharedPreferences.getInstance();
   }
 
   Future<void> _register() async {

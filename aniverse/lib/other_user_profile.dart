@@ -2,6 +2,9 @@ import 'package:aniverse/profile_list.dart';
 import 'package:flutter/material.dart';
 import 'package:aniverse/entity/user_profile_dto.dart';
 import 'package:aniverse/service/profile_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class OtherProfilePage extends StatefulWidget {
   final String username;
@@ -14,12 +17,80 @@ class OtherProfilePage extends StatefulWidget {
 
 class _OtherProfilePageState extends State<OtherProfilePage> {
   late Future<UserProfileDTO> _otherProfileFuture;
+  int? currentUserId;
+  int? otherUserId;
+  int? isFollowing;
 
   @override
   void initState() {
     super.initState();
     _otherProfileFuture =
         ProfileService().getUserProfileByName(widget.username);
+    _initializeProfileData();
+  }
+
+  Future<void> _initializeProfileData() async {
+    currentUserId = await _getCurrentUserID();
+    _otherProfileFuture =
+        ProfileService().getUserProfileByName(widget.username);
+    final otherProfile = await _otherProfileFuture;
+    otherUserId = otherProfile.id;
+    isFollowing =
+        await ProfileService().isFollowing(currentUserId!, otherUserId!);
+    setState(() {});
+  }
+
+  Future<int?> _getCurrentUserID() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('currentUserId');
+  }
+
+  Future<void> _followAUser() async {
+    final _current = currentUserId!;
+    final _other = otherUserId!;
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2:8080/api/auth/$_current/follow/$_other'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    final responseJson = jsonDecode(response.body);
+
+    if (response.statusCode == 200 && responseJson['success'] == true) {
+      setState(() {
+        isFollowing = 1;
+        _otherProfileFuture =
+            ProfileService().getUserProfileByName(widget.username);
+      });
+    } else {
+      final snackBar = SnackBar(content: Text(responseJson['message']));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
+  Future<void> _unfollow() async {
+    final _current = currentUserId!;
+    final _other = otherUserId!;
+    final response = await http.delete(
+      Uri.parse('http://10.0.2.2:8080/api/auth/$_current/unfollow/$_other'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    final responseJson = jsonDecode(response.body);
+
+    if (response.statusCode == 200 && responseJson['success'] == true) {
+      setState(() {
+        isFollowing = 0;
+        _otherProfileFuture =
+            ProfileService().getUserProfileByName(widget.username);
+      });
+    } else {
+      final snackBar = SnackBar(content: Text(responseJson['message']));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 
   @override
@@ -30,19 +101,23 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
         child: FutureBuilder<UserProfileDTO>(
           future: _otherProfileFuture,
           builder: (context, snapshot) {
-            if (snapshot.hasData) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (snapshot.hasData) {
               final userProfile = snapshot.data!;
-              final userId = userProfile.id;
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 15),
                   CircleAvatar(
                     radius: 50,
                     backgroundImage: NetworkImage(
-                        userProfile.avatarUrl ?? 'assets/logo.png'),
+                      userProfile.avatarUrl ?? 'assets/logo.png',
+                    ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 6),
                   Text(
                     userProfile.username,
                     style: const TextStyle(
@@ -50,14 +125,37 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 6),
                   Text(
                     userProfile.bio ?? "bio",
                     style: const TextStyle(
                       fontSize: 16,
                     ),
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 6),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 8.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (isFollowing == 1) {
+                          _unfollow();
+                        } else {
+                          _followAUser();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            isFollowing == 1 ? Colors.grey : Colors.tealAccent,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      child: Text(isFollowing == 1 ? 'Unfollow' : 'Follow'),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
                   Expanded(
                     child: ListView(
                       children: <Widget>[
@@ -71,7 +169,7 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    FollowingPage(userId: userId),
+                                    FollowingPage(userId: userProfile.id),
                               ),
                             );
                           },
@@ -86,7 +184,7 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    FollowerPage(userId: userId),
+                                    FollowerPage(userId: userProfile.id),
                               ),
                             );
                           },
@@ -114,23 +212,22 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                   ),
                 ],
               );
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
+            } else {
+              return const Center(child: Text('No profile data available'));
             }
-            // Display a loading indicator while fetching data
-            return const Center(child: CircularProgressIndicator());
           },
         ),
       ),
     );
   }
 
-  Widget _buildProfileItem(
-      {required BuildContext context,
-      required String title,
-      required String subtitle,
-      required VoidCallback onTap,
-      required IconData icon}) {
+  Widget _buildProfileItem({
+    required BuildContext context,
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
     return InkWell(
       onTap: onTap,
       child: ListTile(
@@ -140,23 +237,4 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
       ),
     );
   }
-}
-
-Widget _buildProfileItem(IconData icon, String title, String count) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-    child: Card(
-      child: ListTile(
-        leading: Icon(icon, size: 40, color: Colors.blue),
-        title: Text(
-          title,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        trailing: Text(
-          count,
-          style: const TextStyle(fontSize: 16),
-        ),
-      ),
-    ),
-  );
 }

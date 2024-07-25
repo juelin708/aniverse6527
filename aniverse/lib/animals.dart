@@ -1,3 +1,4 @@
+import 'package:aniverse/setting_page.dart';
 import 'package:flutter/material.dart';
 import 'package:aniverse/map.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -130,7 +131,7 @@ class _AnimalsState extends State<Animals> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const ProfilePage()),
+                  MaterialPageRoute(builder: (context) => const SettingsPage()),
                 );
               },
             ),
