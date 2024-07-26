@@ -1,4 +1,8 @@
+import 'package:aniverse/setting_page.dart';
 import 'package:flutter/material.dart';
+import 'package:aniverse/map.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:aniverse/profile_page.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -16,7 +20,12 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[
+  Future<int?> _getCurrentUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('currentUserId') ?? 0;
+  }
+
+  static final List<Widget> _widgetOptions = <Widget>[
     Animals(),
     PlaceholderWidget(), // Page for calendar
     PlaceholderWidget(), // Page for add button
@@ -86,10 +95,10 @@ class _AnimalsState extends State<Animals> {
             IconButton(
               icon: const Icon(Icons.location_pin, color: Colors.red),
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => MapSample()),
-                // );
+                 Navigator.push(
+                   context,
+                   MaterialPageRoute(builder: (context) => MapSample()),
+                 );
               },
             ),
             Expanded(
@@ -123,7 +132,7 @@ class _AnimalsState extends State<Animals> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const ProfilePage()),
+                  MaterialPageRoute(builder: (context) => const SettingsPage()),
                 );
               },
             ),
@@ -450,22 +459,6 @@ class PlaceholderWidget extends StatelessWidget {
     return const Scaffold(
       body: Center(
         child: Text('tbc'),
-      ),
-    );
-  }
-}
-
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile Page'),
-      ),
-      body: const Center(
-        child: Text('This is the Profile Page'),
       ),
     );
   }
