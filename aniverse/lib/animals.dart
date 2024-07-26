@@ -1,8 +1,4 @@
-import 'package:aniverse/setting_page.dart';
 import 'package:flutter/material.dart';
-import 'package:aniverse/map.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:aniverse/profile_page.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -20,12 +16,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-  Future<int?> _getCurrentUserId() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getInt('currentUserId') ?? 0;
-  }
-
-  static final List<Widget> _widgetOptions = <Widget>[
+  static const List<Widget> _widgetOptions = <Widget>[
     Animals(),
     PlaceholderWidget(), // Page for calendar
     PlaceholderWidget(), // Page for add button
@@ -68,6 +59,7 @@ class _MainScreenState extends State<MainScreen> {
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],
+        unselectedItemColor: Colors.black12,
         onTap: _onItemTapped,
       ),
     );
@@ -94,10 +86,10 @@ class _AnimalsState extends State<Animals> {
             IconButton(
               icon: const Icon(Icons.location_pin, color: Colors.red),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MapSample()),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => MapSample()),
+                // );
               },
             ),
             Expanded(
@@ -131,7 +123,7 @@ class _AnimalsState extends State<Animals> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const SettingsPage()),
+                  MaterialPageRoute(builder: (context) => const ProfilePage()),
                 );
               },
             ),
@@ -143,28 +135,308 @@ class _AnimalsState extends State<Animals> {
         child: GridView.count(
           crossAxisCount: 2,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Image.asset(
-                  'images/dog.jpg'), // Replace with your image asset
-            ),
-            Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Image.asset(
-                  'images/cat.jpg'), // Replace with your image asset
-            ),
-            Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Image.asset(
-                  'images/monkey.jpg'), // Replace with your image asset
-            ),
-            Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Image.asset(
-                  'images/rooster.jpg'), // Replace with your image asset
-            ),
+            _buildImageButton(context, 'images/dog.jpg', const DogPage()),
+            _buildImageButton(context, 'images/cat.jpg', const CatPage()),
+            _buildImageButton(context, 'images/monkey.jpg', const MonkeyPage()),
+            _buildImageButton(context, 'images/rooster.jpg', const RoosterPage()),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildImageButton(BuildContext context, String imagePath, Widget page) {
+    return Padding(
+      padding: const EdgeInsets.all(30.0),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => page,
+            ),
+          );
+        },
+        child: Image.asset(imagePath),
+      ),
+    );
+  }
+}
+
+class DogPage extends StatelessWidget {
+  const DogPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Dog Page'),
+      ),
+      body: GridView.count(
+        crossAxisCount: 2,
+        children: [
+          _buildProfileButton(context, 'Dog1', 'images/dog1.jpg', const DogDetailPage(name: 'Dog1')),
+          _buildProfileButton(context, 'Dog2', 'images/dog2.jpg', const DogDetailPage(name: 'Dog2')),
+          _buildProfileButton(context, 'Dog3', 'images/dog3.jpg', const DogDetailPage(name: 'Dog3')),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProfileButton(BuildContext context, String name, String imagePath, Widget page) {
+    return Padding(
+      padding: const EdgeInsets.all(30.0),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => page,
+            ),
+          );
+        },
+        child: Column(
+          children: [
+            CircleAvatar(
+              radius: 60,
+              backgroundImage: AssetImage(imagePath),
+            ),
+            const SizedBox(height: 20),
+            Text(name,
+            style: const TextStyle(
+              fontSize: 16, 
+              fontWeight: FontWeight.bold, 
+            )
+          )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DogDetailPage extends StatelessWidget {
+  final String name;
+  const DogDetailPage({super.key, required this.name});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(name),
+      ),
+      body: Center(
+        child: Text('This is the detail page for $name'),
+      ),
+    );
+  }
+}
+
+class CatPage extends StatelessWidget {
+  const CatPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Cat Page'),
+      ),
+      body: GridView.count(
+        crossAxisCount: 2,
+        children: [
+          _buildProfileButton(context, 'Putu', 'images/putu.jpg', const CatDetailPage(name: 'Putu')),
+          _buildProfileButton(context, 'Ashy', 'images/ashy.jpg', const CatDetailPage(name: 'Ashy')),
+          _buildProfileButton(context, 'Plum', 'images/plum.jpg', const CatDetailPage(name: 'Plum')),
+          _buildProfileButton(context, 'Fred', 'images/fred.jpg', const CatDetailPage(name: 'Fred')),
+          _buildProfileButton(context, 'Kit', 'images/kit.jpg', const CatDetailPage(name: 'Kit')),
+          _buildProfileButton(context, 'Lily', 'images/lily.jpg', const CatDetailPage(name: 'Lily')),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProfileButton(BuildContext context, String name, String imagePath, Widget page) {
+    return Padding(
+      padding: const EdgeInsets.all(30.0),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => page,
+            ),
+          );
+        },
+        child: Column(
+          children: [
+            CircleAvatar(
+              radius: 60,
+              backgroundImage: AssetImage(imagePath),
+            ),
+            const SizedBox(height: 20),
+            Text(name,
+            style: const TextStyle(
+              fontSize: 16, 
+              fontWeight: FontWeight.bold, 
+            )
+          )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CatDetailPage extends StatelessWidget {
+  final String name;
+  const CatDetailPage({super.key, required this.name});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(name),
+      ),
+      body: Center(
+        child: Text('This is the detail page for $name'),
+      ),
+    );
+  }
+}
+
+class MonkeyPage extends StatelessWidget {
+  const MonkeyPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Monkey Page'),
+      ),
+      body: GridView.count(
+        crossAxisCount: 2,
+        children: [
+          _buildProfileButton(context, 'Monkey1', 'images/monkey1.jpg', const MonkeyDetailPage(name: 'Monkey1')),
+          _buildProfileButton(context, 'Monkey2', 'images/monkey2.jpg', const MonkeyDetailPage(name: 'Monkey2')),
+          _buildProfileButton(context, 'Monkey3', 'images/monkey3.jpg', const MonkeyDetailPage(name: 'Monkey3')),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProfileButton(BuildContext context, String name, String imagePath, Widget page) {
+    return Padding(
+      padding: const EdgeInsets.all(30.0),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => page,
+            ),
+          );
+        },
+        child: Column(
+          children: [
+            CircleAvatar(
+              radius: 60,
+              backgroundImage: AssetImage(imagePath),
+            ),
+            const SizedBox(height: 20),
+            Text(name,
+            style: const TextStyle(
+              fontSize: 16, 
+              fontWeight: FontWeight.bold, 
+            )
+          )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class MonkeyDetailPage extends StatelessWidget {
+  final String name;
+  const MonkeyDetailPage({super.key, required this.name});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(name),
+      ),
+      body: Center(
+        child: Text('This is the detail page for $name'),
+      ),
+    );
+  }
+}
+
+class RoosterPage extends StatelessWidget {
+  const RoosterPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Rooster Page'),
+      ),
+      body: GridView.count(
+        crossAxisCount: 2,
+        children: [
+          _buildProfileButton(context, 'Rooster1', 'images/rooster1.jpg', const RoosterDetailPage(name: 'Rooster1')),
+          _buildProfileButton(context, 'Rooster2', 'images/rooster2.jpg', const RoosterDetailPage(name: 'Rooster2')),
+          _buildProfileButton(context, 'Rooster3', 'images/rooster3.jpg', const RoosterDetailPage(name: 'Rooster3')),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProfileButton(BuildContext context, String name, String imagePath, Widget page) {
+    return Padding(
+      padding: const EdgeInsets.all(30.0),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => page,
+            ),
+          );
+        },
+        child: Column(
+          children: [
+            CircleAvatar(
+              radius: 60,
+              backgroundImage: AssetImage(imagePath),
+            ),
+            const SizedBox(height: 20),
+            Text(name,
+            style: const TextStyle(
+              fontSize: 16, 
+              fontWeight: FontWeight.bold, 
+            )
+          )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class RoosterDetailPage extends StatelessWidget {
+  final String name;
+  const RoosterDetailPage({super.key, required this.name});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(name),
+      ),
+      body: Center(
+        child: Text('This is the detail page for $name'),
       ),
     );
   }
@@ -178,6 +450,22 @@ class PlaceholderWidget extends StatelessWidget {
     return const Scaffold(
       body: Center(
         child: Text('tbc'),
+      ),
+    );
+  }
+}
+
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Profile Page'),
+      ),
+      body: const Center(
+        child: Text('This is the Profile Page'),
       ),
     );
   }
