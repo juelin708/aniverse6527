@@ -52,7 +52,6 @@ class _SettingsPageState extends State<SettingsPage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(50),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             height: 50,
             child: const Center(
               child: Text(
