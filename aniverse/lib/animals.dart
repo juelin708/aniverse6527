@@ -257,8 +257,6 @@ class CatPage extends StatelessWidget {
           _buildProfileButton(context, 'Ashy', 'images/ashy.jpg', const CatDetailPage(name: 'Ashy')),
           _buildProfileButton(context, 'Plum', 'images/plum.jpg', const CatDetailPage(name: 'Plum')),
           _buildProfileButton(context, 'Fred', 'images/fred.jpg', const CatDetailPage(name: 'Fred')),
-          _buildProfileButton(context, 'Kit', 'images/kit.jpg', const CatDetailPage(name: 'Kit')),
-          _buildProfileButton(context, 'Lily', 'images/lily.jpg', const CatDetailPage(name: 'Lily')),
         ],
       ),
     );
