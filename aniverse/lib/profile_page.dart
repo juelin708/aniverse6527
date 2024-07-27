@@ -48,13 +48,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 10),
                         CircleAvatar(
                           radius: 50,
                           backgroundImage: NetworkImage(userProfile.avatarUrl ??
                               'assets/images/logo.png'),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 10),
                         Text(
                           userProfile.username,
                           style: const TextStyle(

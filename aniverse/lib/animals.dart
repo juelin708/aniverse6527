@@ -1,7 +1,6 @@
 import 'package:aniverse/setting_page.dart';
 import 'package:flutter/material.dart';
 import 'package:aniverse/map.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:aniverse/profile_page.dart';
 import 'package:aniverse/various_animals.dart';
 
@@ -22,11 +21,6 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-
-  Future<int?> _getCurrentUserId() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getInt('currentUserId') ?? 0;
-  }
 
   static final List<Widget> _widgetOptions = <Widget>[
     Animals(),

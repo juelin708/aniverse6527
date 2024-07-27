@@ -4,7 +4,7 @@ class Animal {
   String habit;
   String habitats;
   String location;
-  String imageUrl;
+  String? imageUrl;
 
   Animal({
     required this.id,
@@ -12,7 +12,7 @@ class Animal {
     required this.habit,
     required this.habitats,
     required this.location,
-    required this.imageUrl,
+    this.imageUrl,
   });
 
   factory Animal.fromJson(Map<String, dynamic> json) {
