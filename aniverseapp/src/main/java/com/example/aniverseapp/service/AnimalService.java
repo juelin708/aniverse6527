@@ -9,6 +9,7 @@ import com.example.aniverseapp.dto.AnimalUpdateDTO;
 import com.example.aniverseapp.Response;
 
 import java.util.Optional;
+import java.util.List;
 
 @Service
 public class AnimalService {
@@ -55,13 +56,13 @@ public class AnimalService {
             return Response.newFailure("Animal with id: " + id + " does not exist");
         }
         Animal original = animalRepository.findById(id).orElse(null);
-        if (animalDTO.getHabit() != null) {
+        if (animalDTO.getHabit() != null && animalDTO.getHabit().length() != 0) {
             original.setHabit(animalDTO.getHabit());
         }
-        if (animalDTO.getHabitats() != null) {
+        if (animalDTO.getHabitats() != null && animalDTO.getHabitats().length() != 0) {
             original.setHabitats(animalDTO.getHabitats());
         }
-        if (animalDTO.getImageUrl() != null) {
+        if (animalDTO.getImageUrl() != null && animalDTO.getImageUrl().length() != 0) {
             original.setImageUrl(animalDTO.getImageUrl());
         }
         animalRepository.save(original);
@@ -74,5 +75,9 @@ public class AnimalService {
         }
         animalRepository.deleteById(id);
         return Response.newSuccess(null, "Animal with id: " + id + " deleted");
+    }
+
+    public Response<List<Animal>> getAllAnimals() {
+        return Response.newSuccess(animalRepository.findAll(), null);
     }
 }
