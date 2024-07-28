@@ -48,13 +48,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 10),
                         CircleAvatar(
                           radius: 50,
-                          backgroundImage: NetworkImage(
-                              userProfile.avatarUrl ?? 'assets/logo.png'),
+                          backgroundImage: NetworkImage(userProfile.avatarUrl ??
+                              'assets/images/logo.png'),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 10),
                         Text(
                           userProfile.username,
                           style: const TextStyle(
@@ -94,7 +94,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                 title: 'Followers',
                                 subtitle: userProfile.fanNum.toString(),
                                 onTap: () {
-                                  // Handle navigation to Followers Screen
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          FollowerPage(userId: userId!),
+                                    ),
+                                  );
                                 },
                               ),
                               _buildProfileItem(
@@ -103,7 +109,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                 title: 'My Posts',
                                 subtitle: userProfile.postNum.toString(),
                                 onTap: () {
-                                  // Handle navigation to Posts Screen
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          PostsPage(userId: userId!),
+                                    ),
+                                  );
                                 },
                               ),
                               _buildProfileItem(
@@ -112,7 +124,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                 title: 'Likes',
                                 subtitle: userProfile.likedPostNum.toString(),
                                 onTap: () {
-                                  // Handle navigation to Likes Screen
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          LikesPage(userId: userId!),
+                                    ),
+                                  );
                                 },
                               ),
                             ],

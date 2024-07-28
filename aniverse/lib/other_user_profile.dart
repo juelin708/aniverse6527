@@ -192,10 +192,16 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                         _buildProfileItem(
                           icon: Icons.post_add,
                           context: context,
-                          title: 'My Posts',
+                          title: 'Posts',
                           subtitle: userProfile.postNum.toString(),
                           onTap: () {
-                            // Handle navigation to Posts Screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    PostsPage(userId: otherUserId!),
+                              ),
+                            );
                           },
                         ),
                         _buildProfileItem(
@@ -204,7 +210,13 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                           title: 'Likes',
                           subtitle: userProfile.likedPostNum.toString(),
                           onTap: () {
-                            // Handle navigation to Likes Screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    LikesPage(userId: otherUserId!),
+                              ),
+                            );
                           },
                         ),
                       ],

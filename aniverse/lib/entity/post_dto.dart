@@ -1,4 +1,4 @@
-import "package:aniverse/entity/CommentDTO.dart";
+import "package:aniverse/entity/comment_dto.dart";
 
 class PostDTO {
   int id;
@@ -6,10 +6,10 @@ class PostDTO {
   String animalname;
   String content;
   String date;
-  String title;
-  String imageUrl;
-  List<String> likedBy;
-  List<CommentDTO> comments;
+  String? title;
+  String? imageUrl;
+  List<String>? likedBy;
+  List<CommentDTO>? comments;
   int likeNum;
   int commentNum;
 
@@ -19,10 +19,10 @@ class PostDTO {
     required this.animalname,
     required this.content,
     required this.date,
-    required this.title,
-    required this.imageUrl,
-    required this.likedBy,
-    required this.comments,
+    this.title,
+    this.imageUrl,
+    this.likedBy,
+    this.comments,
     required this.likeNum,
     required this.commentNum,
   });
@@ -36,8 +36,12 @@ class PostDTO {
       date: json['date'],
       title: json['title'],
       imageUrl: json['imageUrl'],
-      likedBy: List<String>.from(json['likedBy']),
-      comments: List<CommentDTO>.from(json['comments']),
+      likedBy:
+          json['likedBy'] != null ? List<String>.from(json['likedBy']) : null,
+      comments: json['comments'] != null
+          ? List<CommentDTO>.from(
+              json['comments'].map((comment) => CommentDTO.fromJson(comment)))
+          : null,
       likeNum: json['likeNum'],
       commentNum: json['commentNum'],
     );

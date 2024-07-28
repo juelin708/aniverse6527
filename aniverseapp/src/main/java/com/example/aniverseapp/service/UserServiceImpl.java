@@ -101,13 +101,13 @@ public class UserServiceImpl implements UserService {
             return Response.newFailure("User with id: " + id + " does not exist");
         }
         User original = userRepository.findById(id).orElse(null);
-        if (userDTO.getAvatarUrl().length() != 0) {
+        if (userDTO.getAvatarUrl() != null && userDTO.getAvatarUrl().length() != 0) {
             original.setAvatarUrl(userDTO.getAvatarUrl());
         }
-        if (userDTO.getBio().length() != 0) {
+        if (userDTO.getBio() != null && userDTO.getBio().length() != 0) {
             original.setBio(userDTO.getBio());
         }
-        if (userDTO.getPassword().length() != 0) {
+        if (userDTO.getPassword() != null && userDTO.getPassword().length() != 0) {
             original.setPassword(userDTO.getPassword());
         }
         userRepository.save(original);

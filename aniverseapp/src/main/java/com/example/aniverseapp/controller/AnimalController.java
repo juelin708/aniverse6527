@@ -31,7 +31,7 @@ public class AnimalController {
     }
 
     @PutMapping("/update/location/{id}")
-    public Response<Animal> updateLocation(@PathVariable Long id, @RequestBody String location) {
+    public Response<Animal> updateLocation(@PathVariable Long id, @RequestParam String location) {
         return animalService.updateLocation(id, location);
     }
 

@@ -34,7 +34,6 @@ class _SettingsPageState extends State<SettingsPage> {
           ListTile(
             title: const Text('Update user profile'),
             onTap: () {
-              // Navigate to account information page
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -138,23 +137,6 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      /*
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white.withOpacity(0.7),
-                        border: Border.all(
-                          color: const Color.fromARGB(255, 243, 143, 176)
-                              .withOpacity(0.7),
-                        ),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.white,
-                            blurRadius: 20,
-                            offset: Offset(0, 5),
-                          ),
-                        ],
-                      ),
-                      */
                       child: Column(
                         children: <Widget>[
                           Container(
@@ -187,6 +169,38 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
                             ),
                           ),
                           const SizedBox(height: 20),
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: const Border(
+                                top: BorderSide(
+                                  color: Color.fromARGB(176, 243, 143, 176),
+                                ),
+                                right: BorderSide(
+                                  color: Color.fromARGB(176, 243, 143, 176),
+                                ),
+                                left: BorderSide(
+                                  color: Color.fromARGB(176, 243, 143, 176),
+                                ),
+                                bottom: BorderSide(
+                                  color: Color.fromARGB(176, 243, 143, 176),
+                                ),
+                              ),
+                            ),
+                            child: TextField(
+                              controller: _avatarController,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: "new avatar url",
+                                hintStyle:
+                                    TextStyle(color: Colors.grey.shade700),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
                           Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
