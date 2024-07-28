@@ -1,8 +1,10 @@
-import 'package:aniverse/setting_page.dart';
 import 'package:flutter/material.dart';
-import 'package:aniverse/map.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:aniverse/profile_page.dart';
+import 'create_post_page.dart';
+import 'forum_main_page.dart';
+import 'profile_page.dart';
+import 'map.dart';
+import 'setting_page.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -27,8 +29,8 @@ class _MainScreenState extends State<MainScreen> {
 
   static final List<Widget> _widgetOptions = <Widget>[
     Animals(),
-    PlaceholderWidget(), // Page for calendar
-    PlaceholderWidget(), // Page for add button
+    ForumMainPage(),
+    AddPostPage(),
     PlaceholderWidget(), // Page for chat
     ProfilePage(),
   ];
@@ -51,7 +53,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today),
-            label: 'Calendar',
+            label: 'Forum',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.add_circle_outline),
@@ -73,6 +75,9 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
   }
+}
+
+class CreatePostPage {
 }
 
 class Animals extends StatefulWidget {
@@ -101,20 +106,8 @@ class _AnimalsState extends State<Animals> {
                  );
               },
             ),
-            Expanded(
-              child: TextField(
-                controller: _searchController,
-                decoration: const InputDecoration(
-                  hintText: '# putu',
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.search, color: Colors.black),
-              onPressed: () {
-                // Implement search functionality here
-              },
+            const Expanded(
+              child: SizedBox(),
             ),
             IconButton(
               icon: const CircleAvatar(
