@@ -184,15 +184,82 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Text('Name: ${widget.name}',
-                      style: const TextStyle(
-                          fontSize: 24, fontWeight: FontWeight.bold)),
+                  // Text('Name: ${widget.name}',
+                  //     style: const TextStyle(
+                  //         fontSize: 24, fontWeight: FontWeight.bold)),
+                  // const SizedBox(height: 8),
+                  // Text('Fun Fact: \n${animal.habit}',
+                  //     style: const TextStyle(fontSize: 16)),
+                  // const SizedBox(height: 12),
+                  // Text('Habitats: \n${animal.habitats}',
+                  //     style: const TextStyle(fontSize: 16)),
+
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        const TextSpan(
+                          text: 'Name: ',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        TextSpan(
+                          text: widget.name,
+                          style: const TextStyle(
+                            fontSize: 24,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   const SizedBox(height: 8),
-                  Text('Fun Fact: \n${animal.habit}',
-                      style: const TextStyle(fontSize: 16)),
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        const TextSpan(
+                          text: 'Fun Fact: \n',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        TextSpan(
+                          text: animal.habit,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   const SizedBox(height: 12),
-                  Text('Habitats: \n${animal.habitats}',
-                      style: const TextStyle(fontSize: 16)),
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        const TextSpan(
+                          text: 'Habitats: \n',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        TextSpan(
+                          text: animal.habitats,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ), //the end of text.rich
+
                   const SizedBox(height: 8),
                   Center(
                     child: ElevatedButton(
