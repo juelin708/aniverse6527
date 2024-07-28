@@ -27,6 +27,11 @@ public class PostController {
         return postService.likePost(postId, userId);
     }
 
+    @DeleteMapping("/unlike")
+    public Response<Void> unlikePost(@RequestParam Long postId, @RequestParam Long userId) {
+        return postService.unlikePost(postId, userId);
+    }
+
     @PostMapping("/comment")
     public Response<Void> commentPost(@RequestParam Long postId, @RequestParam Long userId, @RequestParam String content) {
         return postService.commentPost(postId, userId, content);
@@ -58,7 +63,12 @@ public class PostController {
     }
 
     @GetMapping("{userId}/isLiking/{postId}")
-    public Response<Integer> isFollowing(@PathVariable Long userId, @PathVariable Long postId) {
+    public Response<Integer> isLiking(@PathVariable Long userId, @PathVariable Long postId) {
         return postService.isLiking(userId, postId);
+    }
+
+    @GetMapping("all")
+    public Response<List<PostDTO>> getAllPosts() {
+        return postService.getAllPosts();
     }
 }

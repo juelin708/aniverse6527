@@ -34,4 +34,24 @@ class AnimalService {
       throw Exception('Failed to load animal profile');
     }
   }
+
+  Future<List<Animal>> getAnimals() async {
+    final String url = 'http://10.0.2.2:8080/api/animal/all';
+
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body);
+      if (responseBody['success']) {
+        List<Animal> animals = (responseBody['data'] as List)
+            .map((animal) => Animal.fromJson(animal))
+            .toList();
+        return animals;
+      } else {
+        throw Exception('Failed to fetch posts: ${responseBody['message']}');
+      }
+    } else {
+      throw Exception('Failed to fetch posts');
+    }
+  }
 }

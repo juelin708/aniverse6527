@@ -19,7 +19,7 @@ public class PostCreateDTO {
         return animalId;
     }
 
-    public void setAnimamlId(Long animalId) {
+    public void setAnimalId(Long animalId) {
         this.animalId = animalId;
     }
 

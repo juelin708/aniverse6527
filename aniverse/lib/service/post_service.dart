@@ -78,4 +78,61 @@ class PostService {
       throw Exception('Failed to fetch posts');
     }
   }
+
+  Future<void> commentPost(int postId, int userId, String content) async {
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2:8080/api/post/comment'),
+      body: jsonEncode({
+        'postId': postId.toString(),
+        'userId': userId.toString(),
+        'content': content
+      }),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to comment on post');
+    }
+  }
+
+  Future<int> isLiking(int userId, int postId) async {
+    final response = await http.get(
+      Uri.parse('http://10.0.2.2:8080/api/post/$userId/isLiking/$postId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      final data = jsonResponse['data'];
+      if (data is int) {
+        return data;
+      } else {
+        throw Exception('Invalid data type: Expected int');
+      }
+    } else {
+      throw Exception('Failed to check like status');
+    }
+  }
+
+  Future<List<PostDTO>> getAllPosts() async {
+    final String url = 'http://10.0.2.2:8080/api/post/all';
+
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body);
+      if (responseBody['success']) {
+        List<PostDTO> posts = (responseBody['data'] as List)
+            .map((post) => PostDTO.fromJson(post))
+            .toList();
+        return posts;
+      } else {
+        throw Exception('Failed to fetch posts: ${responseBody['message']}');
+      }
+    } else {
+      throw Exception('Failed to fetch posts');
+    }
+  }
 }

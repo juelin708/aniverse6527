@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.aniverseapp.dao.*;
 import com.example.aniverseapp.dto.PostCreateDTO;
@@ -52,6 +53,7 @@ public class PostService {
         return Response.newSuccess(PostConverter.convertToPostDTO(post), "Post created successfully");
     }
 
+    @Transactional
     public Response<Void> likePost(Long postId, Long userId) {
         if (postRepository.findById(postId).isEmpty()) {
             return Response.newFailure("Post with id: " + postId + " does not exist");
@@ -59,11 +61,14 @@ public class PostService {
         if (userRepository.findById(userId).isEmpty()) {
             return Response.newFailure("User with id: " + userId + " does not exist");
         }
-        Post post = postRepository.findById(postId).get();
-        User user = userRepository.findById(userId).get();
-        post.getLikedBy().add(user);
-        postRepository.save(post);
+        postRepository.likePost(postId, userId);
         return Response.newSuccess(null, "Post liked successfully");
+    }
+
+    @Transactional
+    public Response<Void> unlikePost(Long postId, Long userId) {
+        postRepository.unlikePost(postId, userId);
+        return Response.newSuccess(null, "Post unliked successfully");
     }
 
     public Response<Void> commentPost(Long postId, Long userId, String content) {
@@ -143,6 +148,18 @@ public class PostService {
             return Response.newFailure("Post with id: " + postId + " does not exist");
         }
         return Response.newSuccess(postRepository.isLiking(userId, postId), null);
+    }
+
+    public Response<List<PostDTO>> getAllPosts() {
+        List<Post> posts = postRepository.findAll();
+        List<PostDTO> postDTOs = new ArrayList<>();
+        if (posts == null) {
+            return Response.newFailure("No posts found");
+        }
+        for (Post post : posts) {
+            postDTOs.add(PostConverter.convertToPostDTO(post));
+        }
+        return Response.newSuccess(postDTOs, null);
     }
 }
 

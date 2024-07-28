@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:aniverse/create_post_page.dart';
 import 'package:aniverse/forum_main_page.dart';
 import 'package:aniverse/setting_page.dart';
@@ -28,7 +27,7 @@ class _MainScreenState extends State<MainScreen> {
   static final List<Widget> _widgetOptions = <Widget>[
     Animals(),
     ForumMainPage(),
-    AddPostPage(),
+    CreatePostPage(),
     PlaceholderWidget(), // Page for chat
     ProfilePage(),
   ];
@@ -75,9 +74,6 @@ class _MainScreenState extends State<MainScreen> {
   }
 }
 
-class CreatePostPage {
-}
-
 class Animals extends StatefulWidget {
   const Animals({super.key});
 
@@ -86,8 +82,6 @@ class Animals extends StatefulWidget {
 }
 
 class _AnimalsState extends State<Animals> {
-  final TextEditingController _searchController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

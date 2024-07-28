@@ -172,7 +172,7 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
             return const Center(child: Text('Animal not found.'));
           } else {
             final animal = snapshot.data!;
-            return Padding(
+            return SingleChildScrollView(
               padding: const EdgeInsets.all(10.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -190,7 +190,7 @@ class _AnimalDetailPageState extends State<AnimalDetailPage> {
                   const SizedBox(height: 8),
                   Text('Fun Fact: \n${animal.habit}',
                       style: const TextStyle(fontSize: 16)),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 12),
                   Text('Habitats: \n${animal.habitats}',
                       style: const TextStyle(fontSize: 16)),
                   const SizedBox(height: 8),
@@ -269,20 +269,63 @@ class _AnimalPostsPageState extends State<AnimalPostsPage> {
               itemCount: posts.length,
               itemBuilder: (context, index) {
                 final post = posts[index];
-                return ListTile(
-                  title: Text(
-                    post.title ?? 'No Title',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(post.content),
+                return InkWell(
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PostDetailPage(post: post),
+                        builder: (context) => PostDetailPage(postId: post.id),
                       ),
                     );
                   },
+                  child: Card(
+                    margin: const EdgeInsets.all(8.0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            post.title ?? "No title",
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          if (post.imageUrl != null)
+                            Image.network(
+                              post.imageUrl!,
+                              fit: BoxFit.cover,
+                            ),
+                          const SizedBox(height: 8),
+                          Text(post.content),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Column(
+                                children: [
+                                  IconButton(
+                                      icon: const Icon(Icons.thumb_up),
+                                      onPressed: () {}),
+                                  Text('${post.likeNum}')
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.comment),
+                                    onPressed: () {},
+                                  ),
+                                  Text('${post.commentNum}')
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 );
               },
             );

@@ -7,6 +7,10 @@ import com.example.aniverseapp.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/animal")
@@ -39,4 +43,10 @@ public class AnimalController {
     public Response<Animal> updateAnimalProfile(@PathVariable long id, @RequestBody AnimalUpdateDTO animalDTO) {
         return animalService.updateAnimalProfile(id, animalDTO);
     }
+
+    @GetMapping("all")
+    public Response<List<Animal>> getAllAnimals() {
+        return animalService.getAllAnimals();
+    }
+    
 }

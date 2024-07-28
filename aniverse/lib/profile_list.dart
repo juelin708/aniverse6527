@@ -5,6 +5,9 @@ import "package:aniverse/profile_page.dart";
 import 'package:aniverse/service/post_service.dart';
 import "package:aniverse/entity/post_dto.dart";
 import "package:aniverse/entity/comment_dto.dart";
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class FollowingPage extends StatefulWidget {
   final int userId;
@@ -182,20 +185,63 @@ class _PostsPageState extends State<PostsPage> {
               itemCount: posts.length,
               itemBuilder: (context, index) {
                 final post = posts[index];
-                return ListTile(
-                  title: Text(
-                    post.title ?? 'No Title',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(post.content),
+                return InkWell(
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PostDetailPage(post: post),
+                        builder: (context) => PostDetailPage(postId: post.id),
                       ),
                     );
                   },
+                  child: Card(
+                    margin: const EdgeInsets.all(8.0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            post.title ?? "No title",
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          if (post.imageUrl != null)
+                            Image.network(
+                              post.imageUrl!,
+                              fit: BoxFit.cover,
+                            ),
+                          const SizedBox(height: 8),
+                          Text(post.content),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Column(
+                                children: [
+                                  IconButton(
+                                      icon: const Icon(Icons.thumb_up),
+                                      onPressed: () {}),
+                                  Text('${post.likeNum}')
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.comment),
+                                    onPressed: () {},
+                                  ),
+                                  Text('${post.commentNum}')
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 );
               },
             );
@@ -206,44 +252,292 @@ class _PostsPageState extends State<PostsPage> {
   }
 }
 
-class PostDetailPage extends StatelessWidget {
-  final PostDTO post;
-  const PostDetailPage({Key? key, required this.post}) : super(key: key);
+class PostDetailPage extends StatefulWidget {
+  final int postId;
+
+  const PostDetailPage({Key? key, required this.postId}) : super(key: key);
+
+  @override
+  _PostDetailPageState createState() => _PostDetailPageState();
+}
+
+class _PostDetailPageState extends State<PostDetailPage> {
+  late Future<PostDTO> _postFuture;
+  final TextEditingController _commentController = TextEditingController();
+  int? currentUserId;
+  int? isLiking;
+
+  @override
+  void initState() {
+    super.initState();
+    _postFuture = _initializeData();
+  }
+
+  Future<PostDTO> _initializeData() async {
+    final post = await PostService().getPost(widget.postId);
+    currentUserId = await _getCurrentUserID();
+    isLiking = await PostService().isLiking(currentUserId!, post.id);
+    return post;
+  }
+
+  Future<int?> _getCurrentUserID() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('currentUserId');
+  }
+
+  Future<void> _likePost(PostDTO post) async {
+    try {
+      final response = await http.post(
+        Uri.parse(
+            'http://10.0.2.2:8080/api/post/like?postId=${post.id}&userId=$currentUserId'),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        final responseJson = jsonDecode(response.body);
+
+        if (responseJson['success'] == true) {
+          final updatedPost = await PostService().getPost(post.id);
+          setState(() {
+            isLiking = 1;
+            _postFuture = Future.value(updatedPost);
+          });
+        } else {
+          final snackBar = SnackBar(content: Text(responseJson['message']));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+      } else {
+        final snackBar = SnackBar(
+            content: Text('Failed to like post: ${response.statusCode}'));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    } catch (e) {
+      final snackBar = SnackBar(content: Text('An error occurred: $e'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
+  Future<void> _unlikePost(PostDTO post) async {
+    try {
+      final response = await http.delete(
+        Uri.parse(
+            'http://10.0.2.2:8080/api/post/unlike?postId=${post.id}&userId=$currentUserId'),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        final responseJson = jsonDecode(response.body);
+
+        if (responseJson['success'] == true) {
+          final updatedPost = await PostService().getPost(post.id);
+          setState(() {
+            isLiking = 0;
+            _postFuture = Future.value(updatedPost);
+          });
+        } else {
+          final snackBar = SnackBar(content: Text(responseJson['message']));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+      } else {
+        final snackBar = SnackBar(
+            content: Text('Failed to unlike post: ${response.statusCode}'));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    } catch (e) {
+      final snackBar = SnackBar(content: Text('An error occurred: $e'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
+  Future<void> _commentPost(PostDTO post) async {
+    try {
+      final content = _commentController.text;
+      final response = await http.post(
+        Uri.parse(
+            'http://10.0.2.2:8080/api/post/comment?postId=${post.id}&userId=$currentUserId&content=$content'),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        final responseJson = jsonDecode(response.body);
+
+        if (responseJson['success'] == true) {
+          final updatedPost = await PostService().getPost(post.id);
+          setState(() {
+            _postFuture = Future.value(updatedPost);
+            _commentController.clear();
+          });
+        } else {
+          final snackBar = SnackBar(content: Text(responseJson['message']));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+      } else {
+        final snackBar = SnackBar(content: Text('Failed to comment on post'));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    } catch (e) {
+      final snackBar = SnackBar(content: Text('An error occurred: $e'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
+  void _navigateToLikedByPage(List<String> likedBy) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LikedByPage(likedBy: likedBy),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(post.title ?? 'Post Details')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('By: ${post.username}',
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 8),
-              Text(post.content),
-              const SizedBox(height: 8),
-              if (post.imageUrl != null) Image.network(post.imageUrl!),
-              const SizedBox(height: 8),
-              Text('Likes: ${post.likeNum}, Comments: ${post.commentNum}'),
-              const SizedBox(height: 8),
-              Text(post.date,
-                  style: TextStyle(color: Colors.grey, fontSize: 12)),
-              const SizedBox(height: 16),
-              const Text('Comments:',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 8),
-              if (post.comments != null && post.comments!.isNotEmpty)
-                ...post.comments!
-                    .map((comment) => CommentWidget(comment))
-                    .toList()
-              else
-                const Text('No comments yet.'),
-            ],
-          ),
-        ),
+      appBar: AppBar(title: const Text('Post Details')),
+      body: FutureBuilder<PostDTO>(
+        future: _postFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData) {
+            return const Center(child: Text('No post found.'));
+          } else {
+            final post = snapshot.data!;
+
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                OtherProfilePage(username: post.username),
+                          ),
+                        );
+                      },
+                      child: Text('By: ${post.username}',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 15)),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(post.content, style: const TextStyle(fontSize: 17)),
+                    const SizedBox(height: 15),
+                    if (post.imageUrl != null) Image.network(post.imageUrl!),
+                    const SizedBox(height: 8),
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Column(
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.thumb_up),
+                                onPressed: () =>
+                                    _navigateToLikedByPage(post.likedBy!),
+                              ),
+                              Text('${post.likeNum}')
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.comment),
+                                onPressed: () {},
+                              ),
+                              Text('${post.commentNum}')
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Center(
+                      child: SizedBox(
+                        width: 120,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (isLiking == 1) {
+                              _unlikePost(post);
+                            } else {
+                              _likePost(post);
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                isLiking == 1 ? Colors.grey : Colors.tealAccent,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          child: Text(isLiking == 1 ? 'Unlike' : 'Like'),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: _commentController,
+                      decoration: InputDecoration(
+                        labelText: 'Add a comment',
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.send),
+                          onPressed: () => _commentPost(post),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const Text('Comments:',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 8),
+                    if (post.comments != null && post.comments!.isNotEmpty)
+                      ...post.comments!
+                          .map((comment) => CommentWidget(comment))
+                          .toList()
+                    else
+                      const Text('No comments yet.'),
+                  ],
+                ),
+              ),
+            );
+          }
+        },
+      ),
+    );
+  }
+}
+
+class LikedByPage extends StatelessWidget {
+  final List<String> likedBy;
+
+  const LikedByPage({Key? key, required this.likedBy}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Likes')),
+      body: ListView.builder(
+        itemCount: likedBy.length,
+        itemBuilder: (context, index) {
+          final username = likedBy[index];
+          return ListTile(
+            title: Text(username),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => OtherProfilePage(username: username),
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
@@ -310,20 +604,63 @@ class _LikesPageState extends State<LikesPage> {
               itemCount: posts.length,
               itemBuilder: (context, index) {
                 final post = posts[index];
-                return ListTile(
-                  title: Text(
-                    post.title ?? 'No Title',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(post.content),
+                return InkWell(
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PostDetailPage(post: post),
+                        builder: (context) => PostDetailPage(postId: post.id),
                       ),
                     );
                   },
+                  child: Card(
+                    margin: const EdgeInsets.all(8.0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            post.title ?? "No title",
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          if (post.imageUrl != null)
+                            Image.network(
+                              post.imageUrl!,
+                              fit: BoxFit.cover,
+                            ),
+                          const SizedBox(height: 8),
+                          Text(post.content),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Column(
+                                children: [
+                                  IconButton(
+                                      icon: const Icon(Icons.thumb_up),
+                                      onPressed: () {}),
+                                  Text('${post.likeNum}')
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.comment),
+                                    onPressed: () {},
+                                  ),
+                                  Text('${post.commentNum}')
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 );
               },
             );

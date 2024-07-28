@@ -39,7 +39,7 @@ class MapSampleState extends State<MapSample> {
         onMapCreated: _onMapCreated,
         initialCameraPosition: CameraPosition(
           target: _center,
-          zoom: 12.0,
+          zoom: 13.0,
         ),
       ),
     );
