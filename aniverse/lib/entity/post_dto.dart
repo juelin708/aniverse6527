@@ -5,7 +5,7 @@ class PostDTO {
   String username;
   String animalname;
   String content;
-  String date;
+  DateTime date;
   String? title;
   String? imageUrl;
   List<String>? likedBy;
@@ -33,7 +33,7 @@ class PostDTO {
       username: json['username'],
       animalname: json['animalname'],
       content: json['content'],
-      date: json['date'],
+      date: DateTime.parse(json['date']),
       title: json['title'],
       imageUrl: json['imageUrl'],
       likedBy:

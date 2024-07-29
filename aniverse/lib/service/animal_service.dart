@@ -48,10 +48,10 @@ class AnimalService {
             .toList();
         return animals;
       } else {
-        throw Exception('Failed to fetch posts: ${responseBody['message']}');
+        throw Exception('Failed to fetch animals: ${responseBody['message']}');
       }
     } else {
-      throw Exception('Failed to fetch posts');
+      throw Exception('Failed to fetch animals');
     }
   }
 }

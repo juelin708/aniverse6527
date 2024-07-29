@@ -5,6 +5,7 @@ import 'package:aniverse/setting_page.dart';
 import 'package:aniverse/map.dart';
 import 'package:aniverse/profile_page.dart';
 import 'package:aniverse/various_animals.dart';
+import 'package:aniverse/chats.dart';
 
 /*
 void main() {
@@ -28,7 +29,7 @@ class _MainScreenState extends State<MainScreen> {
     Animals(),
     ForumMainPage(),
     CreatePostPage(),
-    PlaceholderWidget(), // Page for chat
+    ChatPage(), // Page for chat
     ProfilePage(),
   ];
 
@@ -154,19 +155,6 @@ class _AnimalsState extends State<Animals> {
           );
         },
         child: Image.asset(imagePath),
-      ),
-    );
-  }
-}
-
-class PlaceholderWidget extends StatelessWidget {
-  const PlaceholderWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('tbc'),
       ),
     );
   }

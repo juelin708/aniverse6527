@@ -1,6 +1,6 @@
 package com.example.aniverseapp.dao;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 
@@ -24,8 +24,12 @@ public class Comment {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "date")
-    private LocalDate date;
+    @Column(name = "date", insertable = false, updatable = false)
+    private LocalDateTime date;
+
+    public Comment() {
+        this.date = LocalDateTime.now();
+    }
 
     // Getters and setters
     public Long getId() {
@@ -60,11 +64,11 @@ public class Comment {
         this.content = content;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 }

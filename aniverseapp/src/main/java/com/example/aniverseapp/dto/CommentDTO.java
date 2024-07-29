@@ -1,13 +1,13 @@
 package com.example.aniverseapp.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class CommentDTO {
     private Long id;
     private String username;
     private Long postId;
     private String content;
-    private LocalDate date; 
+    private LocalDateTime date; 
 
     public Long getId() {
         return id;
@@ -41,11 +41,11 @@ public class CommentDTO {
         this.content = content;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 }

@@ -17,22 +17,35 @@ public class UserConverter {
 
         List<User> followings = user.getFollowings();
         List<String> followingsNames = new ArrayList<>();
-        for (User following : followings) {
-            String followingName = following.getUsername();
-            followingsNames.add(followingName);
+        if (followings == null) {
+            userDTO.setFollowings(followingsNames);
+            userDTO.setFollowingNum(0);
+
+        } else {
+            for (User following : followings) {
+                String followingName = following.getUsername();
+                followingsNames.add(followingName);
+            }
+            userDTO.setFollowings(followingsNames);
+            userDTO.setFollowingNum(followings.size());
         }
+        
         userDTO.setFollowings(followingsNames);
 
         List<User> fans = user.getFans();
         List<String> fansNames = new ArrayList<>();
-        for (User fan : fans) {
-            String fanName = fan.getUsername();
-            fansNames.add(fanName);
+        if (fans == null) {
+            userDTO.setFans(fansNames);
+            userDTO.setFanNum(0);
+        } else {
+            for (User fan : fans) {
+                String fanName = fan.getUsername();
+                fansNames.add(fanName);
+            }
+            userDTO.setFans(fansNames);
+            userDTO.setFanNum(fans.size());
         }
-        userDTO.setFans(fansNames);
-
-        userDTO.setFanNum(fans.size());
-        userDTO.setFollowingNum(followings.size());
+        
         userDTO.setId(user.getId());
         return userDTO;
     }

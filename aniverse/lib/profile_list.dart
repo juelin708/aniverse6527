@@ -431,6 +431,10 @@ class _PostDetailPageState extends State<PostDetailPage> {
                     const SizedBox(height: 15),
                     if (post.imageUrl != null) Image.network(post.imageUrl!),
                     const SizedBox(height: 8),
+                    Text(post.date.toString(),
+                        style:
+                            const TextStyle(color: Colors.grey, fontSize: 12)),
+                    const SizedBox(height: 8),
                     Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -559,7 +563,7 @@ class CommentWidget extends StatelessWidget {
           const SizedBox(height: 4),
           Text(comment.content),
           const SizedBox(height: 4),
-          Text(comment.date,
+          Text(comment.date.toString(),
               style: TextStyle(color: Colors.grey, fontSize: 12)),
           const Divider(),
         ],

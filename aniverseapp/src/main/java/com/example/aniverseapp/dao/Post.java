@@ -3,7 +3,7 @@ package com.example.aniverseapp.dao;
 import jakarta.persistence.*;
 
 import java.util.List;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "posts")
@@ -24,8 +24,8 @@ public class Post {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "date")
-    private LocalDate date;
+    @Column(name = "date", insertable = false, updatable = false)
+    private LocalDateTime date;
 
     @Column(name = "title")
     private String title;
@@ -44,6 +44,9 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
+    public Post() {
+        this.date = LocalDateTime.now();
+    }
     // Getters and setters
     public Long getId() {
         return id;
@@ -77,11 +80,11 @@ public class Post {
         this.content = content;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

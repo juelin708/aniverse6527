@@ -3,7 +3,7 @@ class CommentDTO {
   String username;
   int postId;
   String content;
-  String date;
+  DateTime date;
 
   CommentDTO({
     required this.id,
@@ -19,7 +19,7 @@ class CommentDTO {
       username: json['username'],
       postId: json['postId'],
       content: json['content'],
-      date: json['date'],
+      date: DateTime.parse(json['date']),
     );
   }
 }

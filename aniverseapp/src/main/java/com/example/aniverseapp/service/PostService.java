@@ -42,7 +42,6 @@ public class PostService {
         post.setUser(userRepository.findById(userId).get());
         post.setAnimal(animalRepository.findById(animalId).get());
         post.setContent(dto.getContent());
-        post.setDate(java.time.LocalDate.now());
         if (dto.getTitle() != null) {
             post.setTitle(dto.getTitle());
         }
@@ -84,7 +83,6 @@ public class PostService {
         comment.setPost(post);
         comment.setUser(user);
         comment.setContent(content);
-        comment.setDate(java.time.LocalDate.now());
         post.getComments().add(comment);
         postRepository.save(post);
         return Response.newSuccess(null, "Comment added successfully");

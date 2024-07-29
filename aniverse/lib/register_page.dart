@@ -40,20 +40,19 @@ class _RegisterPageState extends State<RegisterPage> {
     );
 
     final responseJson = jsonDecode(response.body);
-    final snackBar = SnackBar(content: Text(responseJson['message']));
 
     if (response.statusCode == 200 && responseJson['success'] == true) {
+      final snackBar = SnackBar(content: Text(responseJson['message']));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
       _prefs.setInt('currentUserId', responseJson['data']['id']);
 
-      // Navigate to login page
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const MainScreen()),
       );
     } else {
-      // Show error message
+      final snackBar = SnackBar(content: Text(responseJson['message']));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }

@@ -1,14 +1,14 @@
 package com.example.aniverseapp.dto;
 
 import java.util.List;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class PostDTO {
     private Long id;
     private String username;
     private String animalname;
     private String content;
-    private LocalDate date;
+    private LocalDateTime date;
     private String title;
     private String imageUrl;
     private List<String> likedBy;
@@ -49,11 +49,11 @@ public class PostDTO {
         this.content = content;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

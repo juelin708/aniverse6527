@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Column;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -39,8 +40,8 @@ public class User {
         joinColumns = @JoinColumn(name = "fan_id"),
         inverseJoinColumns =@JoinColumn(name = "followed_id")
     )
-    private List<User> followings;
-
+    private List<User> followings = new ArrayList<>();
+    
     @ManyToMany
     @JoinTable(
         name = "fans",
