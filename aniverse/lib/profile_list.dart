@@ -8,6 +8,7 @@ import "package:aniverse/entity/comment_dto.dart";
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:aniverse/config.dart';
 
 class FollowingPage extends StatefulWidget {
   final int userId;
@@ -289,7 +290,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     try {
       final response = await http.post(
         Uri.parse(
-            'http://10.0.2.2:8080/api/post/like?postId=${post.id}&userId=$currentUserId'),
+            '${Config.baseUrl}/post/like?postId=${post.id}&userId=$currentUserId'),
         headers: {'Content-Type': 'application/json'},
       );
 
@@ -321,7 +322,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     try {
       final response = await http.delete(
         Uri.parse(
-            'http://10.0.2.2:8080/api/post/unlike?postId=${post.id}&userId=$currentUserId'),
+            '${Config.baseUrl}/post/unlike?postId=${post.id}&userId=$currentUserId'),
         headers: {'Content-Type': 'application/json'},
       );
 
@@ -354,7 +355,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
       final content = _commentController.text;
       final response = await http.post(
         Uri.parse(
-            'http://10.0.2.2:8080/api/post/comment?postId=${post.id}&userId=$currentUserId&content=$content'),
+            '${Config.baseUrl}/post/comment?postId=${post.id}&userId=$currentUserId&content=$content'),
         headers: {'Content-Type': 'application/json'},
       );
 

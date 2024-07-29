@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:aniverse/config.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -29,7 +30,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> _register() async {
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:8080/api/auth/register'),
+      Uri.parse('${Config.baseUrl}/auth/register'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

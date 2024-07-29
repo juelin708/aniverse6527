@@ -5,6 +5,7 @@ import 'package:aniverse/service/profile_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:aniverse/config.dart';
 
 class OtherProfilePage extends StatefulWidget {
   final String username;
@@ -49,7 +50,7 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
     final _current = currentUserId!;
     final _other = otherUserId!;
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:8080/api/auth/$_current/follow/$_other'),
+      Uri.parse('h${Config.baseUrl}/auth/$_current/follow/$_other'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -73,7 +74,7 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
     final _current = currentUserId!;
     final _other = otherUserId!;
     final response = await http.delete(
-      Uri.parse('http://10.0.2.2:8080/api/auth/$_current/unfollow/$_other'),
+      Uri.parse('${Config.baseUrl}/auth/$_current/unfollow/$_other'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

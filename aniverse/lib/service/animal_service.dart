@@ -1,11 +1,12 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:aniverse/entity/animal_dto.dart';
+import 'package:aniverse/config.dart';
 
 class AnimalService {
   Future<Animal> getAnimal(int animalId) async {
     final response = await http.get(
-      Uri.parse('http://10.0.2.2:8080/api/animal/$animalId'),
+      Uri.parse('${Config.baseUrl}/animal/$animalId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -21,7 +22,7 @@ class AnimalService {
 
   Future<Animal> getAnimalByName(String animalname) async {
     final response = await http.get(
-      Uri.parse('http://10.0.2.2:8080/api/animal/byAnimalname/$animalname'),
+      Uri.parse('${Config.baseUrl}/animal/byAnimalname/$animalname'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -36,7 +37,7 @@ class AnimalService {
   }
 
   Future<List<Animal>> getAnimals() async {
-    final String url = 'http://10.0.2.2:8080/api/animal/all';
+    final String url = '${Config.baseUrl}/animal/all';
 
     final response = await http.get(Uri.parse(url));
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:aniverse/config.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -96,7 +97,7 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
 
   Future<void> _update() async {
     final response = await http.put(
-      Uri.parse('http://10.0.2.2:8080/api/auth/user/update/$currentUserId'),
+      Uri.parse('${Config.baseUrl}/auth/user/update/$currentUserId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

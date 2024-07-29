@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:aniverse/config.dart';
 
 Future<int?> _getCurrentUserID() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -31,8 +32,8 @@ class _ChatPageState extends State<ChatPage> {
 
   Future<void> fetchChatPreviews() async {
     final currentUserId = await _getCurrentUserID();
-    final response = await http.get(
-        Uri.parse('http://10.0.2.2:8080/api/chat/previews/$currentUserId'));
+    final response = await http
+        .get(Uri.parse('${Config.baseUrl}/chat/previews/$currentUserId'));
 
     final responseJson = jsonDecode(response.body);
 
@@ -124,7 +125,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   Future<void> fetchMessages() async {
     final currentUserId = await _getCurrentUserID();
     final response = await http.get(Uri.parse(
-        'http://10.0.2.2:8080/api/chat/${currentUserId}/${widget.username}'));
+        '${Config.baseUrl}/chat/${currentUserId}/${widget.username}'));
 
     final responseJson = jsonDecode(response.body);
     if (response.statusCode == 200) {
@@ -148,7 +149,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   Future<void> sendMessage(String content) async {
     final currentUserId = await _getCurrentUserID();
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:8080/api/chat/send'),
+      Uri.parse('${Config.baseUrl}/chat/send'),
       body: {
         'senderId': currentUserId.toString(),
         'receiverName': widget.username,

@@ -1,11 +1,12 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:aniverse/entity/user_profile_dto.dart';
+import 'package:aniverse/config.dart';
 
 class ProfileService {
   Future<UserProfileDTO> getUserProfile(int userId) async {
     final response = await http.get(
-      Uri.parse('http://10.0.2.2:8080/api/auth/user/$userId'),
+      Uri.parse('${Config.baseUrl}/auth/user/$userId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -21,7 +22,7 @@ class ProfileService {
 
   Future<int> isFollowing(int fanId, int followedId) async {
     final response = await http.get(
-      Uri.parse('http://10.0.2.2:8080/api/auth/$fanId/isFollowing/$followedId'),
+      Uri.parse('${Config.baseUrl}/auth/$fanId/isFollowing/$followedId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -42,7 +43,7 @@ class ProfileService {
 
   Future<UserProfileDTO> getUserProfileByName(String username) async {
     final response = await http.get(
-      Uri.parse('http://10.0.2.2:8080/api/auth/user/byUsername/$username'),
+      Uri.parse('${Config.baseUrl}/auth/user/byUsername/$username'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -57,7 +58,7 @@ class ProfileService {
   }
 
   Future<List<String>> getFollowings(int userId) async {
-    final String url = 'http://10.0.2.2:8080/api/auth/followings/$userId';
+    final String url = '${Config.baseUrl}/auth/followings/$userId';
 
     final response = await http.get(Uri.parse(url));
 
@@ -76,7 +77,7 @@ class ProfileService {
   }
 
   Future<List<String>> getFollowers(int userId) async {
-    final String url = 'http://10.0.2.2:8080/api/auth/fans/$userId';
+    final String url = '${Config.baseUrl}/auth/fans/$userId';
 
     final response = await http.get(Uri.parse(url));
 

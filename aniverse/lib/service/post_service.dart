@@ -1,11 +1,12 @@
 import 'package:aniverse/entity/post_dto.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:aniverse/config.dart';
 
 class PostService {
   Future<PostDTO> getPost(int postId) async {
     final response = await http.get(
-      Uri.parse('http://10.0.2.2:8080/api/post/$postId'),
+      Uri.parse('${Config.baseUrl}/post/$postId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -20,7 +21,7 @@ class PostService {
   }
 
   Future<List<PostDTO>> getPostsByUserId(int userId) async {
-    final String url = 'http://10.0.2.2:8080/api/post/user/$userId';
+    final String url = '${Config.baseUrl}/post/user/$userId';
 
     final response = await http.get(Uri.parse(url));
 
@@ -40,7 +41,7 @@ class PostService {
   }
 
   Future<List<PostDTO>> getPostsByAnimalId(int animalId) async {
-    final String url = 'http://10.0.2.2:8080/api/post/animal/$animalId';
+    final String url = '${Config.baseUrl}/post/animal/$animalId';
 
     final response = await http.get(Uri.parse(url));
 
@@ -60,7 +61,7 @@ class PostService {
   }
 
   Future<List<PostDTO>> getLikedPosts(int userId) async {
-    final String url = 'http://10.0.2.2:8080/api/post/likedBy/$userId';
+    final String url = '${Config.baseUrl}/post/likedBy/$userId';
 
     final response = await http.get(Uri.parse(url));
 
@@ -81,7 +82,7 @@ class PostService {
 
   Future<void> commentPost(int postId, int userId, String content) async {
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:8080/api/post/comment'),
+      Uri.parse('${Config.baseUrl}/post/comment'),
       body: jsonEncode({
         'postId': postId.toString(),
         'userId': userId.toString(),
@@ -97,7 +98,7 @@ class PostService {
 
   Future<int> isLiking(int userId, int postId) async {
     final response = await http.get(
-      Uri.parse('http://10.0.2.2:8080/api/post/$userId/isLiking/$postId'),
+      Uri.parse('${Config.baseUrl}/post/$userId/isLiking/$postId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -117,7 +118,7 @@ class PostService {
   }
 
   Future<List<PostDTO>> getAllPosts() async {
-    final String url = 'http://10.0.2.2:8080/api/post/all';
+    final String url = '${Config.baseUrl}/post/all';
 
     final response = await http.get(Uri.parse(url));
 

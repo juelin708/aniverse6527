@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:aniverse/profile_list.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:aniverse/config.dart';
 
 class CreatePostPage extends StatefulWidget {
   const CreatePostPage({Key? key}) : super(key: key);
@@ -43,7 +44,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
   Future<void> _fetchAnimalNames() async {
     try {
       final response = await http.get(
-        Uri.parse('http://10.0.2.2:8080/api/animal/all'),
+        Uri.parse('${Config.baseUrl}/animal/all'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -79,7 +80,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
     final request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://10.0.2.2:8080/api/upload'),
+      Uri.parse('${Config.baseUrl}/upload'),
     );
     request.files
         .add(await http.MultipartFile.fromPath('file', _selectedImage!.path));
@@ -107,7 +108,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     }
 
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:8080/api/post/create'),
+      Uri.parse('${Config.baseUrl}/post/create'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -170,7 +171,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
   Future<void> _updateAnimalLocation(int animalId, String location) async {
     final response = await http.put(
-      Uri.parse('http://10.0.2.2:8080/api/animal/update/location/$animalId'),
+      Uri.parse('${Config.baseUrl}/animal/update/location/$animalId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
