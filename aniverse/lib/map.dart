@@ -42,7 +42,7 @@ class MapSampleState extends State<MapSample> {
   void _populateMarkers() async {
     final animals = await _animalsFuture;
     for (final animal in animals) {
-      final coordinates = animal.location.split(' ,');
+      final coordinates = animal.location.split(',');
       final double latitude = double.parse(coordinates[0]);
       final double longitude = double.parse(coordinates[1]);
       final LatLng animalLocation = LatLng(latitude, longitude);
@@ -50,7 +50,6 @@ class MapSampleState extends State<MapSample> {
       final marker = Marker(
         markerId: MarkerId(animal.id.toString()),
         position: animalLocation,
-        icon: await _createMarkerImageFromUrl(animal.imageUrl ?? ''),
         infoWindow: InfoWindow(
           title: animal.animalname,
           onTap: () {
@@ -70,19 +69,11 @@ class MapSampleState extends State<MapSample> {
     }
   }
 
-  Future<BitmapDescriptor> _createMarkerImageFromUrl(String url) async {
-    final ImageConfiguration imageConfiguration =
-        ImageConfiguration(size: Size(48, 48));
-    BitmapDescriptor bitmapImage =
-        await BitmapDescriptor.fromAssetImage(imageConfiguration, url);
-    return bitmapImage;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Google Maps Flutter'),
+        title: const Text('Real-time Animal Map'),
         backgroundColor: Colors.green[700],
       ),
       body: FutureBuilder<List<Animal>>(

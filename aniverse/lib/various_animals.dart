@@ -332,6 +332,7 @@ class _AnimalPostsPageState extends State<AnimalPostsPage> {
             return const Center(child: Text('No posts found.'));
           } else {
             final posts = snapshot.data!;
+            posts.sort((a, b) => b.date.compareTo(a.date));
             return ListView.builder(
               itemCount: posts.length,
               itemBuilder: (context, index) {
