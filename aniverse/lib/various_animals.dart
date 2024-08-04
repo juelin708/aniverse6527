@@ -51,12 +51,20 @@ class DogPage extends StatelessWidget {
       body: GridView.count(
         crossAxisCount: 2,
         children: [
-          _buildProfileButton(context, 'Dog1', 'images/dog1.jpg',
-              const AnimalDetailPage(name: 'Dog1')),
-          _buildProfileButton(context, 'Dog2', 'images/dog2.jpg',
-              const AnimalDetailPage(name: 'Dog2')),
-          _buildProfileButton(context, 'Dog3', 'images/dog3.jpg',
-              const AnimalDetailPage(name: 'Dog3')),
+          _buildProfileButton(context, 'Samoyed', 'images/samoyed.png',
+              const AnimalDetailPage(name: 'Samoyed')),
+          _buildProfileButton(
+              context,
+              'Border Collie',
+              'images/border_collie.png',
+              const AnimalDetailPage(name: 'Border Collie')),
+          _buildProfileButton(context, 'Maltese', 'images/maltese.png',
+              const AnimalDetailPage(name: 'Maltese')),
+          _buildProfileButton(
+              context,
+              'Golden Retriever',
+              'images/golden_retriever.jpg',
+              const AnimalDetailPage(name: 'Golden Retriever')),
         ],
       ),
     );
@@ -103,12 +111,11 @@ class MonkeyPage extends StatelessWidget {
       body: GridView.count(
         crossAxisCount: 2,
         children: [
-          _buildProfileButton(context, 'Monkey1', 'images/monkey1.jpg',
-              const AnimalDetailPage(name: 'Monkey1')),
-          _buildProfileButton(context, 'Monkey2', 'images/monkey2.jpg',
-              const AnimalDetailPage(name: 'Monkey2')),
-          _buildProfileButton(context, 'Monkey3', 'images/monkey3.jpg',
-              const AnimalDetailPage(name: 'Monkey3')),
+          _buildProfileButton(
+              context,
+              'Long-tailed Macaque',
+              'images/macaque.jpg',
+              const AnimalDetailPage(name: 'Long-tailed Macaque')),
         ],
       ),
     );
@@ -127,12 +134,11 @@ class RoosterPage extends StatelessWidget {
       body: GridView.count(
         crossAxisCount: 2,
         children: [
-          _buildProfileButton(context, 'Rooster1', 'images/rooster1.jpg',
-              const AnimalDetailPage(name: 'Rooster1')),
-          _buildProfileButton(context, 'Rooster2', 'images/rooster2.jpg',
-              const AnimalDetailPage(name: 'Rooster2')),
-          _buildProfileButton(context, 'Rooster3', 'images/rooster3.jpg',
-              const AnimalDetailPage(name: 'Rooster3')),
+          _buildProfileButton(
+              context,
+              'Red Junglefowl',
+              'images/junglefowl.jpg',
+              const AnimalDetailPage(name: 'Red Junglefowl')),
         ],
       ),
     );

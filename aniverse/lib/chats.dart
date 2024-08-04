@@ -99,6 +99,10 @@ class _ChatPageState extends State<ChatPage> {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: fetchChatPreviews,
+        child: Icon(Icons.refresh),
+      ),
     );
   }
 }

@@ -50,7 +50,7 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
     final _current = currentUserId!;
     final _other = otherUserId!;
     final response = await http.post(
-      Uri.parse('h${Config.baseUrl}/auth/$_current/follow/$_other'),
+      Uri.parse('${Config.baseUrl}/auth/$_current/follow/$_other'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

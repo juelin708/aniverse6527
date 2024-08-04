@@ -23,6 +23,10 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
+    _initialize();
+  }
+
+  void _initialize() {
     _getUserID().then((value) {
       setState(() {
         userId = value;
@@ -145,6 +149,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   return const Center(child: CircularProgressIndicator());
                 },
               ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _initialize,
+        child: Icon(Icons.refresh),
       ),
     );
   }

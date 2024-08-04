@@ -16,7 +16,13 @@ class _ForumMainPageState extends State<ForumMainPage> {
   @override
   void initState() {
     super.initState();
-    _postsFuture = PostService().getAllPosts();
+    _fetchPosts();
+  }
+
+  void _fetchPosts() {
+    setState(() {
+      _postsFuture = PostService().getAllPosts();
+    });
   }
 
   @override
@@ -101,6 +107,10 @@ class _ForumMainPageState extends State<ForumMainPage> {
             );
           }
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _fetchPosts,
+        child: Icon(Icons.refresh),
       ),
     );
   }
