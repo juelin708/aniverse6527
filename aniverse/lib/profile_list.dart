@@ -560,8 +560,19 @@ class CommentWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(comment.username,
-              style: const TextStyle(fontWeight: FontWeight.bold)),
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      OtherProfilePage(username: comment.username),
+                ),
+              );
+            },
+            child: Text(comment.username,
+                style: const TextStyle(fontWeight: FontWeight.bold)),
+          ),
           const SizedBox(height: 4),
           Text(comment.content),
           const SizedBox(height: 4),
